@@ -19,5 +19,13 @@
   export default {}
 </script>
 <style lang="scss">
-
+.el-table .td-actions {
+  button.btn {
+    margin-right: 5px;
+  }
+}
+.card1 {
+    background-color: #FFFFFF;
+    
+}
 </style>

@@ -24,12 +24,15 @@
     "vee-validate": "^2.1.0-beta.6",
     "vue": "^2.5.16",
     "vue-chartjs": "^3.3.2",
+    "vue-chartkick": "^0.5.0",
     "vue-clickaway": "^2.2.2",
     "vue-loading-overlay": "^3.0.0",
     "vue-loading-spinner": "^1.0.11",
+    "vue-moment": "^4.0.0",
     "vue-notifyjs": "^0.4.3",
     "vue-router": "^3.0.1",
-    "vue2-transitions": "^0.2.3"
+    "vue2-transitions": "^0.2.3",
+    "vuejs-datepicker": "^1.5.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-rc.11",
