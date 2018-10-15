@@ -6,61 +6,124 @@
         :can-cancel="true" 
         :is-full-page="fullPage"></loading>
         
-    <div class="row">
-      <div class="col-lg-4 col-sm-3">
-        <form>
-            <div class="form-group">
-              <label>Email address</label>
-              <fg-input  type="email" name="email" v-validate="modelValidations.email" :error="getError('email')" v-model="userData.email"></fg-input>
-            </div>
-            <div class="form-group">
-              <label>First Name</label>
-              <fg-input  type="firstname" name="firstname" v-validate="modelValidations.firstname" :error="getError('firstname')" v-model="userData.firstname"></fg-input>
-            </div>
-            <div class="form-group">
-              <label>Last Name</label>
-              <fg-input  type="lastname" name="lastname" v-validate="modelValidations.lastname" :error="getError('lastname')" v-model="userData.lastname"></fg-input>
-            </div>
-        </form>
-      </div>
+    <div class="row style-paper">
+        <div class="form-group col-md-4">
+          <h4 class="card-title">Email address</h4>
+          <fg-input  type="email" name="email" v-validate="modelValidations.email" :error="getError('email')" v-model="userData.email"></fg-input>
+        </div>
+        <div class="form-group col-md-4">
+          <h4 class="card-title">First Name</h4>
+          <fg-input  type="firstname" name="firstname" v-validate="modelValidations.firstname" :error="getError('firstname')" v-model="userData.firstname"></fg-input>
+        </div>
+        <div class="form-group col-md-4">
+          <h4 class="card-title">Last Name</h4>
+          <fg-input  type="lastname" name="lastname" v-validate="modelValidations.lastname" :error="getError('lastname')" v-model="userData.lastname" ></fg-input>
+        </div>
     </div>
     <!-- user market place table -->
-    <div class="row">
-      <div class="col-lg-12 card1 table-responsive">
-        <h4>Which marketplaces (Upwork, Golance, Fiverr, etc.) do you use?</h4>
-        <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
-          <thead class="has-gutter">
-            <tr><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
-          </thead>
-          <tbody>
-            <tr v-for="(marketplace,index) in userData.marketplaces"  :key="marketplace.id">
-              <td>{{marketplace.name}}</td>
-              <td>{{marketplace.profile_url}}</td>
-              <td style="width: 18%; height:50px;"><a href="#!" @click="deleete(index)"><i class="fa fa-times"></i></a></td>
-            </tr>
-            <tr>
-              <td>
-                <div class="input-field">
-                  <input class="form-control" placeholder="Name" ref="name" v-model="input.name" id="name" type="text">
-                </div>
-              </td>
-              <td>
-                <div class="input-field">
-                  <input class="form-control"  placeholder="Profile URL" v-model="input.profile_url" id="profile_url" type="text">
-                </div>
-              </td>
-              <td><a href="#!" @click="add" class="btn btn-waves">add</a></td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Which marketplaces (Upwork, Golance, Fiverr, etc.) do you use?</h5>
       </div>
-    </div>
-<!-- // submit button -->
-    <div class="row">
-      <a href="#!" @click="updateProfile" class="btn btn-success">Save</a>
-    </div>
+      <div class="card-body row">
+        <div class="col-sm-12">
+          <div class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition">
+            <div class="hidden-columns">
+              <div></div><div></div><div></div><div></div><div></div></div>
+              <div class="el-table__header-wrapper">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width: 1555px;">
+                  <colgroup><col name="el-table_1_column_1" width="48"><col name="el-table_1_column_2" width="379"><col name="el-table_1_column_3" width="376"><col name="el-table_1_column_4" width="376"><col name="el-table_1_column_5" width="376"><col name="gutter" width="0"></colgroup>
+                  <thead class="has-gutter">
+                    <tr class="text-primary">
+                      <th colspan="2" rowspan="1" class="el-table_1_column_2     is-leaf">
+                        <div class="cell">Marketplace</div>
+                      </th>
+                      <th colspan="2" rowspan="1" class="el-table_1_column_3     is-leaf">
+                        <div class="cell">Profile URL</div>
+                      </th>
+                     
+                      <th colspan="1" rowspan="1" class="el-table_1_column_5  is-right action-buttons td-actions  is-leaf">
+                        <!-- <div class="cell">Actions</div> -->
+                      </th>
+                      <th class="gutter" style="width: 0px; display: none;"></th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div class="el-table__body-wrapper is-scrolling-none">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width: 1555px;">
+                <colgroup><col name="el-table_1_column_1" width="48"><col name="el-table_1_column_2" width="379"><col name="el-table_1_column_3" width="376"><col name="el-table_1_column_4" width="376"><col name="el-table_1_column_5" width="376"></colgroup>
+                  <tbody>
+                    <tr class="el-table__row"  v-for="(marketplace,index) in userData.marketplaces"  :key="marketplace.id">
+                      <td rowspan="1" colspan="2" class="el-table_1_column_2  ">
+                        <div class="cell">{{marketplace.name}}</div>
+                      </td>
+                      <td rowspan="1" colspan="2" class="el-table_1_column_3  ">
+                        <div class="cell">{{marketplace.profile_url}}</div>
+                      </td>
+                     
+                      <td rowspan="1" colspan="1" class="el-table_1_column_5 is-right action-buttons td-actions">
+                        <div class="cell">
+                          <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm">
+                           <i class="fa fa-times"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td rowspan="1" colspan="2" class="el-table_1_column_2  ">
+                        <div class="input-field">
+                          <input class="form-control" placeholder="Name" ref="name" v-model="input.name" id="name" type="text">
+                        </div>
+                      </td>
+                      <td rowspan="1" colspan="1" class="el-table_1_column_3  ">
+                        <div class="input-field">
+                          <input class="form-control"  placeholder="Profile URL" v-model="input.profile_url" id="profile_url" type="text">
+                        </div>
+                      </td>
+                      <td rowspan="1" colspan="2" class="el-table_1_column_5 is-right action-buttons td-actions">
+                        <div class="cell">
+                          <a  @click="add" class="btn btn-success btn-icon add-btn"><i class="fa fa-plus"></i></a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th rowspan="1" colspan="5" class="el-table_1_column_5 is-right action-buttons td-actions">
+                        <div class="row save-button-row">
+                          <a href="#!" @click="updateProfile" class="btn btn-primary">Save</a>
+                        </div>
+                      </th>
+                    </tr>
+                  </tbody>
+             </table>
+           </div><div class="el-table__column-resize-proxy" style="display: none;"></div></div></div></div>
+         </div>
   </div>
 </template>
+<style scoped>
+  .style-paper {
+      -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    background-color: #fff;
+    border: 0;
+    border-radius: 12px;
+    box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
+    color: #252422;
+    margin: 0px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+}
+.save-button-row {
+  display:block;
+  text-align: center;
+}
+.add-btn {
+  color: white !important;
+}
+</style>
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
