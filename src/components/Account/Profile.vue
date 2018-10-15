@@ -64,14 +64,14 @@
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
-import axios from 'axios';
+import axios from "axios";
+import { getProfileAPI, updateProfileAPI } from "./../../api/api";
+import Loading from "vue-loading-overlay";
 
-import Loading from 'vue-loading-overlay';
-
-import 'vue-loading-overlay/dist/vue-loading.css';
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
-  components: {Loading},
+  components: { Loading },
 
   async beforeCreate() {
     try {
@@ -90,9 +90,8 @@ export default {
     });
   },
 
-  mounted () {
-
-    this.getProfile()
+  mounted() {
+    this.getProfile();
   },
 
   data() {
@@ -100,17 +99,17 @@ export default {
       isLoading: false,
       fullPage: true,
       userData: {
-        "entity_id": "",
-        "version": "",
-        "changed_by_id": "",
-        "user_id": "",
-        "changed_on": "",
-        "firstname": "",
-        "lastname": "",
-        "email": "",
-        "marketplaces": []
+        entity_id: "",
+        version: "",
+        changed_by_id: "",
+        user_id: "",
+        changed_on: "",
+        firstname: "",
+        lastname: "",
+        email: "",
+        marketplaces: []
       },
-      
+
       modelValidations: {
         email: {
           required: true,
@@ -127,7 +126,7 @@ export default {
       },
 
       columns: ["Marketplace", "Profile URL", ""],
-      
+
       input: {
         name: "",
         profile_url: ""
@@ -138,40 +137,26 @@ export default {
       }
     };
   },
-  
-  methods: {
 
+  methods: {
     getProfile() {
       this.isLoading = true;
-      axios
-      .get(process.env.VUE_APP_ROOT_API+'/users/'+'80586340-5b00-419b-8b45-9875e96770fd')//this should change later to username
-      .then(response => {
-        this.userData = response.data
+      getProfileAPI().then(data => {
+        this.userData = data;
         this.isLoading = false;
-      })
-      .catch(error => {
-        console.log(error)
-        
-      })
-      .finally(() => this.isLoading = false)
+        console.log(JSON.stringify(this.userData));
+      });
     },
     updateProfile() {
       this.isLoading = true;
-      axios
-      .put(process.env.VUE_APP_ROOT_API+'/users', JSON.stringify(this.userData),{
-        headers: {
-            'Content-Type': 'application/json',
-        }
-      })//this should change later to username
-      .then(response => {
-        this.getProfile()
-      })
-      .catch(error => {
-        console.log(error)
-      })
-      .finally(() => this.isLoading = false)
+      // var params = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
+      updateProfileAPI(this.userData).then(data => {
+        this.userData = data;
+        this.isLoading = false;
+        console.log(JSON.stringify(this.userData));
+        this.getProfile();
+      });
     },
-
     getError(fieldName) {
       return this.errors.first(fieldName);
     },
@@ -192,7 +177,6 @@ export default {
         this.input[key] = "";
       }
       this.$refs.name.focus();
-
     },
     //function to defintely delete data
     deleete: function(index) {
@@ -209,7 +193,6 @@ export default {
 }
 
 .card1 {
-    background-color: #FFFFFF;
-    
+  background-color: #ffffff;
 }
 </style>
