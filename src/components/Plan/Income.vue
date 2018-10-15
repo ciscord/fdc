@@ -8,71 +8,77 @@
         
     <!-- user market place table -->
     <div class="row">
-      <div class="col-lg-6 col-sm-12 card1 table-responsive">
-        
+      <div class="col-lg-6 col-sm-12 style-paper">
         <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
           <thead class="has-gutter">
-            <tr><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
+            <tr class="text-primary"><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
           </thead>
           <tbody>
-            <tr v-for="(income,index) in incomeData"  :key="income.id">
+            <tr v-for="(income,index) in incomeData" class="row-hover"  :key="income.id">
               <td style="width: 40px; height:50px;">{{income.observation_month}}</td>
               <td>{{income.num_projects}}</td>
               <td>{{income.num_hours}}</td>
               <td>${{income.total_income}}</td>
               <td>${{income.total_income/income.num_hours}}</td>
               
-              <td style="width: 40px; height:50px;"><a href="#!" @click="deleete(index)"><i class="fa fa-times"></i></a></td>
+              <td style="width: 40px; height:50px;text-align:center;">
+                <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button>
+              </td>
             </tr>
             <tr>
               <td>
                 <div class="input-field">
-                  <datepicker :value="input.month" v-model="input.month"  format="yyyy-MM-dd"></datepicker>
+                  <datepicker :value="input.month" v-model="input.month" format="yyyy-MM-dd"></datepicker>
                 </div>
               </td>
               <td>
                 <div class="input-field">
-                  <input class="form-control"  ref="projects" placeholder="Projects" v-model="input.projects" id="projects" type="text">
+                  <input class="form-control col-lg-8"  ref="projects" placeholder="Projects" v-model="input.projects" id="projects" type="text">
                 </div>
               </td>
               <td>
                 <div class="input-field">
-                  <input class="form-control"  ref="hours" placeholder="Hours" v-model="input.hours" id="hours" type="number">
+                  <input class="form-control col-lg-8"  ref="hours" placeholder="Hours" v-model="input.hours" id="hours" type="number">
                 </div>
               </td>
               <td>
                 <div class="input-field">
-                  <input class="form-control"  ref="income" placeholder="Income" v-model="input.income" id="income" type="number">
+                  <input class="form-control col-lg-8"  ref="income" placeholder="Income" v-model="input.income" id="income" type="number">
                 </div>
               </td>
               <td></td>
-              <td><a href="#!" @click="add" class="btn btn-waves">add</a></td>
+              <a  @click="add" class="btn btn-success btn-icon add-btn"><i class="fa fa-plus"></i></a>
             </tr>
           </tbody>
         </table>
-        <h1> </h1>
         <!-- projectionsData table -->
-        <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
-          <thead class="has-gutter">
-            <tr><th></th><th v-for="column in projectionsData.years" :key="column.id">{{column}}</th></tr>
-          </thead>
-          <tbody>
-
-            <tr v-for="(projection) in projectionsData.data"  :key="projection.id">
-              
-              <td >{{projection.scenario}}</td>
-              <td v-for="(totalincome) in projection.totalincomes"  :key="totalincome.id">${{totalincome}}</td>
-              
-            </tr>
-          </tbody>
-        </table>
       </div>
-      <div class="col-lg-6  col-sm-12 card1 table-responsive text-center">
+      <div class="col-lg-5 col-sm-12 style-paper text-center chart-cont">
         <small class="text-center">Cumulative Increased Earnings Over Time</small>
         <line-chart :data="chartData" :curve="false"></line-chart>
       </div>
     </div>
 <!-- // submit button -->
+      <div class="row">
+        <div class="col-lg-6 col-sm-12 style-paper">
+          <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
+            <thead class="has-gutter">
+              <tr><th></th><th class="text-primary" v-for="column in projectionsData.years" :key="column.id">{{column}}</th></tr>
+            </thead>
+            <tbody>
+
+              <tr v-for="(projection) in projectionsData.data"  :key="projection.id" class="row-hover">
+                <td v-if="projection.scenario != 'Difference'">{{projection.scenario}}</td>
+                <th v-if="projection.scenario == 'Difference'">{{projection.scenario}}</th>
+                <td v-for="(totalincome) in projection.totalincomes"  :key="totalincome.id">
+                  <strong v-if="projection.scenario == 'Difference'">${{totalincome}}</strong>
+                  <span v-if="projection.scenario != 'Difference'">${{totalincome}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     <div class="row">
       <a href="#!" @click="updateProfile" class="btn btn-success">Save</a>
     </div>
@@ -80,6 +86,35 @@
 
   </div>
 </template>
+<style scoped>
+    .style-paper {
+        -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+      -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+      -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+      -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+      background-color: #fff;
+      border: 0;
+      border-radius: 12px;
+      box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
+      color: #252422;
+      margin: 0px;
+      margin-bottom: 20px;
+      position: relative;
+      transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  }
+  .add-btn {
+    color: white !important;
+  }
+  .chart-cont {
+    margin-left: 20px;
+  }
+  #projects {
+    margin-left: 3px;
+  }
+  .row-hover:hover {
+    background-color: #f5f7fa !important;
+  }
+</style>
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
@@ -169,14 +204,14 @@ export default {
           this.chartData = []
           for (var i=0; i<projectionArray.length; i++) {
             let projects = projectionArray[i]
-            let keys = Object.keys(projects)
-            let values = Object.values(projects)
+            let keys     = Object.keys(projects)
+            let values   = Object.values(projects)
             values.shift()
             values.pop()
-            let projection = {}
-            projection.scenario = projects.scenario
+            let projection          = {}
+            projection.scenario     = projects.scenario
             projection.totalincomes = values
-            projection.footnote = projects.footnote
+            projection.footnote     = projects.footnote
             
             data.push(projection)
 
@@ -184,21 +219,28 @@ export default {
             let chartitem = {}
             chartitem.name = projects.scenario
             chartitem.data = {}
-
+            let firstTotalIncome = data[0].totalincomes
             for (var j=0; j< this.projectionsData.years.length; j++) {
-              
-                chartitem.data[this.projectionsData.years[j].replace(/\s/g, '') ] = projection.totalincomes[j];
+                for (var b=0; b< values.length; b++) {
+                  let income      = values[j]
+                  let firstincome = firstTotalIncome[j]
+                  var dif         = income - firstincome
+                }
+                if(i != 0){
+                  chartitem.data[this.projectionsData.years[j].replace(/\s/g, '') ] = dif;
+                }else {
+                  chartitem.data[this.projectionsData.years[j].replace(/\s/g, '') ] = values[j];
+                }
             }
             this.chartData.push(chartitem)
-
             // add difference and empty row
             if (i == 0) {
-              data.push({})
+              /*data.push({})*/
             }else {
               let firstTotalIncome = data[0].totalincomes
               let difference = []
               for (var j=0; j< values.length; j++) {
-                let income = values[j]
+                let income      = values[j]
                 let firstincome = firstTotalIncome[j]
                 difference.push(income - firstincome)
               }
@@ -209,7 +251,7 @@ export default {
               projection.footnote = ""
               
               data.push(projection)
-              data.push({})
+              /*data.push({})*/
 
             }
           }
