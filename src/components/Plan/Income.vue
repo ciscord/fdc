@@ -2,9 +2,9 @@
   <div class="vld-parent">
     
     
-        <loading :active.sync="isLoading" 
-        :can-cancel="true" 
-        :is-full-page="fullPage"></loading>
+    <loading :active.sync="isLoading" 
+    :can-cancel="true" 
+    :is-full-page="fullPage"></loading>
         
     <!-- user market place table -->
     <div class="row">
@@ -80,7 +80,7 @@
         </div>
       </div>
     <div class="row">
-      <a href="#!" @click="updateProfile" class="btn btn-success">Save</a>
+      <a href="#!" @click="updateIncome" class="btn btn-success">Save</a>
     </div>
 
 
@@ -118,18 +118,21 @@
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
-import axios from 'axios';
 
-import Loading from 'vue-loading-overlay';
-import Datepicker from 'vuejs-datepicker';
-import VueChartkick from 'vue-chartkick'
-import Chart from 'chart.js'
-import Vue from 'vue'
-Vue.use(VueChartkick, {adapter: Chart})
-import 'vue-loading-overlay/dist/vue-loading.css';
+import {
+  getProjectionsAPI,
+  getMonthlyIncomeAPI,
+  updateIncomeAPI
+} from "./../../api/api";
+import Loading from "vue-loading-overlay";
+import Datepicker from "vuejs-datepicker";
+import VueChartkick from "vue-chartkick";
+import Chart from "chart.js";
+import Vue from "vue";
+Vue.use(VueChartkick, { adapter: Chart });
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
-  
   components: {
     Loading,
     Datepicker
@@ -152,10 +155,9 @@ export default {
     });
   },
 
-  mounted () {
-
-    this.getIncome()
-    this.getProjections()
+  mounted() {
+    this.getIncome();
+    this.getProjections();
   },
 
   data() {
@@ -163,10 +165,10 @@ export default {
       isLoading: false,
       fullPage: true,
       incomeData: {},
-      projectionsData:{},
-      yearCols:{},
-      columns: ["Month", "Projects","Hours", "Income", "Effective Rate", ""],
-      
+      projectionsData: {},
+      yearCols: {},
+      columns: ["Month", "Projects", "Hours", "Income", "Effective Rate", ""],
+
       input: {
         month: "",
         projects: "",
@@ -180,25 +182,20 @@ export default {
         income: ""
       },
 
-      chartData:[]
-
+      chartData: []
     };
   },
-  
-  methods: {
 
+  methods: {
     getProjections() {
       this.isLoading = true;
-      axios
-      .get(process.env.VUE_APP_ROOT_API+'/projections/'+'80586340-5b00-419b-8b45-9875e96770fd')//this should change later to username
-      .then(response => {
-        
-        let projectionArray = response.data
-        if (projectionArray.length >0) {
-          let years = Object.keys(projectionArray[0])
-          years.shift()
-          years.pop()
-          this.projectionsData.years = years
+      getProjectionsAPI().then(data => {
+        let projectionArray = data;
+        if (projectionArray.length > 0) {
+          let years = Object.keys(projectionArray[0]);
+          years.shift();
+          years.pop();
+          this.projectionsData.years = years;
 
           let data = []
           this.chartData = []
@@ -252,49 +249,26 @@ export default {
               
               data.push(projection)
               /*data.push({})*/
-
             }
           }
-          this.projectionsData.data = data
-          
+          this.projectionsData.data = data;
         }
         this.isLoading = false;
-      })
-      .catch(error => {
-        console.log(error)
-        
-      })
-      .finally(() => this.isLoading = false)
+      });
     },
     getIncome() {
       this.isLoading = true;
-      axios
-      .get(process.env.VUE_APP_ROOT_API+'/income/'+'80586340-5b00-419b-8b45-9875e96770fd/2017-12-01')//this should change later to username
-      .then(response => {
-        this.incomeData = response.data
+      getMonthlyIncomeAPI().then(data => {
+        this.incomeData = data;
         this.isLoading = false;
-      })
-      .catch(error => {
-        console.log(error)
-        
-      })
-      .finally(() => this.isLoading = false)
+        console.log(JSON.stringify(this.incomeData));
+      });
     },
-    updateProfile() {
+    updateIncome() {
       this.isLoading = true;
-      axios
-      .post(process.env.VUE_APP_ROOT_API+'/income', JSON.stringify(this.incomeData),{
-        headers: {
-            'Content-Type': 'application/json',
-        }
-      })
-      .then(response => {
-        this.getIncome()
-      })
-      .catch(error => {
-        console.log(error)
-      })
-      .finally(() => this.isLoading = false)
+      updateIncomeAPI(this.incomeData).then(data => {
+        this.getIncome();
+      });
     },
 
     getError(fieldName) {
@@ -309,37 +283,35 @@ export default {
 
     add: function() {
       if (this.input.month === "") {
-        return
+        return;
       }
 
       if (this.input.projects === "") {
-        this.$refs.projects.focus()
-        return
+        this.$refs.projects.focus();
+        return;
       }
 
       if (this.input.hours === "") {
-        this.$refs.hours.focus()
-        return
+        this.$refs.hours.focus();
+        return;
       }
 
       if (this.input.income === "") {
-        this.$refs.income.focus()
-        return
+        this.$refs.income.focus();
+        return;
       }
-      
+
       this.incomeData.push({
         observation_month: this.input.month.toISOString().substring(0, 10),
-        num_projects : this.input.projects,
+        num_projects: this.input.projects,
         num_hours: this.input.hours,
         total_income: this.input.income
-
       });
 
       for (var key in this.input) {
         this.input[key] = "";
       }
       this.$refs.projects.focus();
-
     },
     //function to defintely delete data
     deleete: function(index) {
@@ -349,10 +321,8 @@ export default {
 };
 </script>
 <style lang="scss">
-
 .vdp-datepicker__calendar {
   position: fixed;
-  display: block;;
+  display: block;
 }
-
 </style>

@@ -6,3 +6,5 @@ npm-debug.log
 
 storybook-static/
 test/unit/coverage/
+amplify
+src/aws-exports.js
