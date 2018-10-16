@@ -11,8 +11,8 @@
       <div class="col-lg-8 style-paper text-center">
         <h4>Schedules</h4>
         <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <a href="#!" @click="makeCurrent" class="btn btn-round btn-linkedin col-lg-12">Make Current</a>
+          <div class="col-lg-4 col-sm-4 text-left">
+            <a href="#!" @click="makeCurrent" class="btn btn-success make-current-btn-mobile-size">Make Current</a>
           </div>
           <div class="col-lg-4 col-sm-4">
             <el-select size="large" placeholder="Single Select" class="schedule-select" v-model="selects.simple" @change="myFunction()">
@@ -23,8 +23,8 @@
               </el-option>
             </el-select>
           </div>
-          <div class="col-lg-4 col-sm-4">
-            <a href="#!" @click="deleeteTime" class="btn btn-round btn-youtube col-lg-12">Delete</a>
+          <div class="col-lg-4 col-sm-4 text-right">
+            <a href="#!" @click="deleeteTime" class="btn btn-danger delete-btn-mobile-size">Delete</a>
           </div>
         </div>
         <hr>
@@ -36,7 +36,8 @@
             <tbody>
               <tr v-for="(activity, index) in schedulesData[currentIndex].activities"  :key="activity.id">
                 <td>{{activity.name}}</td>
-                <td>{{activity.frequency}}</td>
+                <td v-if="activity.frequency==7">Daily</td>
+                <td v-if="activity.frequency==1">Weekly</td>
                 <td>{{activity.hours}}</td>
                 <td style="width: 18%; height:50px;" class="text-right">
                   <div class="cell">
@@ -116,8 +117,6 @@
     transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
 }
   .el-input--suffix .el-input__inner {
-    border-radius: 20px;
-    border:2px solid #51cbce;
     margin-top:10px;
   }
   .el-select .el-input .el-select__caret{
@@ -137,6 +136,25 @@
   }
   .schedule-select {
     width: 100%;
+  }
+  .btn-lightgreen {
+    background-color: #6bd098;
+  }
+  .el-select .el-input:hover .el-input__icon, .el-select .el-input:hover input {
+    background-color: #51cbce !important;
+  }
+  .el-select .el-input:hover .el-input__icon, .el-select .el-input:hover {
+    background-color: transparent !important;
+
+  }
+  
+  @media (max-width: 575px){
+    .make-current-btn-mobile-size {
+      width: 100%;
+    }
+    .delete-btn-mobile-size {
+      width: 100%;
+    }
   }
 </style>
 <script>
