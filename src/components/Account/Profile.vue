@@ -31,38 +31,29 @@
             <div class="hidden-columns">
               <div></div><div></div><div></div><div></div><div></div></div>
               <div class="el-table__header-wrapper">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">
-                  <colgroup><col name="el-table_1_column_1" width="48"><col name="el-table_1_column_2" width="379"><col name="el-table_1_column_3" width="376"><col name="el-table_1_column_4" width="376"><col name="el-table_1_column_5" width="376"><col name="gutter" width="0"></colgroup>
+                <table cellspacing="0" cellpadding="0" border="0" class="marketplaces-table">
                   <thead class="has-gutter">
                     <tr class="text-primary">
-                      <th colspan="2" rowspan="1" class="el-table_1_column_2     is-leaf">
+                      <th colspan="2" rowspan="1" class="is-leaf">
                         <div class="cell">Marketplace</div>
                       </th>
-                      <th colspan="2" rowspan="1" class="el-table_1_column_3     is-leaf">
+                      <th colspan="2" rowspan="1" class="is-leaf">
                         <div class="cell">Profile URL</div>
                       </th>
-                     
-                      <th colspan="1" rowspan="1" class="el-table_1_column_5  is-right action-buttons td-actions  is-leaf">
-                        <!-- <div class="cell">Actions</div> -->
+                      <th colspan="2" rowspan="1" class="is-leaf">
+                        <div class="cell"></div>
                       </th>
-                      <th class="gutter" style="width: 0px; display: none;"></th>
                     </tr>
                   </thead>
-                </table>
-              </div>
-              <div class="el-table__body-wrapper is-scrolling-none">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width:100%;">
-                <colgroup><col name="el-table_1_column_1" width="48"><col name="el-table_1_column_2" width="379"><col name="el-table_1_column_3" width="376"><col name="el-table_1_column_4" width="376"><col name="el-table_1_column_5" width="376"></colgroup>
                   <tbody>
                     <tr class="el-table__row"  v-for="(marketplace,index) in userData.marketplaces"  :key="marketplace.id">
-                      <td rowspan="1" colspan="2" class="el-table_1_column_2  ">
+                      <td rowspan="1" colspan="2" class=" ">
                         <div class="cell">{{marketplace.name}}</div>
                       </td>
                       <td rowspan="1" colspan="2" class="el-table_1_column_3  ">
                         <div class="cell">{{marketplace.profile_url}}</div>
                       </td>
-                     
-                      <td rowspan="1" colspan="1" class="el-table_1_column_5 is-right action-buttons td-actions">
+                      <td rowspan="1" colspan="1" class="is-right action-buttons td-actions">
                         <div class="cell">
                           <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm">
                            <i class="fa fa-times"></i>
@@ -71,7 +62,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td rowspan="1" colspan="2" class="el-table_1_column_2  ">
+                      <td rowspan="1" colspan="3" class="el-table_1_column_2  ">
                         <div class="input-field">
                           <input class="form-control" placeholder="Name" ref="name" v-model="input.name" id="name" type="text">
                         </div>
@@ -95,8 +86,9 @@
                       </th>
                     </tr>
                   </tbody>
-             </table>
-           </div><div class="el-table__column-resize-proxy" style="display: none;"></div></div></div></div>
+                </table>
+              </div>
+              <div class="el-table__column-resize-proxy" style="display: none;"></div></div></div></div>
          </div>
   </div>
 </template>
@@ -122,6 +114,22 @@
 }
 .add-btn {
   color: white !important;
+}
+.el-table tr {
+  background-color: #fff;
+}
+
+.el-table__header-wrapper tbody td, .el-table__footer-wrapper tbody td{
+  background-color: #fff;
+}
+.marketplaces-table {
+  width: 100%;
+}
+.marketplaces-table input {
+  width: 50%;
+}
+.marketplaces-table tbody tr:hover {
+  background-color: red !important;
 }
 </style>
 <script>
