@@ -14,3 +14,6 @@ export const updateIncomeAPI = params => { return axios.put(`${base}/income`, { 
 
 export const getSchedulesAPI = params => { return axios.get(`${base}/schedules/80586340-5b00-419b-8b45-9875e96770fd`, { params: params }).then(res => res.data); };
 export const updateSchedulesAPI = params => { return axios.put(`${base}/schedules`, { params: params }).then(res => res.data); };
+
+export const getProjectsAPI = params => { return axios.get(`${base}/projects/80586340-5b00-419b-8b45-9875e96770fd`, { params: params }).then(res => res.data); };
+export const addProjectsAPI = params => { return axios.put(`${base}/users`, { params: params }).then(res => res.data); };
