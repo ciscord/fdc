@@ -31,7 +31,7 @@
             <div class="hidden-columns">
               <div></div><div></div><div></div><div></div><div></div></div>
               <div class="el-table__header-wrapper">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width: 1555px;">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">
                   <colgroup><col name="el-table_1_column_1" width="48"><col name="el-table_1_column_2" width="379"><col name="el-table_1_column_3" width="376"><col name="el-table_1_column_4" width="376"><col name="el-table_1_column_5" width="376"><col name="gutter" width="0"></colgroup>
                   <thead class="has-gutter">
                     <tr class="text-primary">
@@ -51,7 +51,7 @@
                 </table>
               </div>
               <div class="el-table__body-wrapper is-scrolling-none">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width: 1555px;">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width:100%;">
                 <colgroup><col name="el-table_1_column_1" width="48"><col name="el-table_1_column_2" width="379"><col name="el-table_1_column_3" width="376"><col name="el-table_1_column_4" width="376"><col name="el-table_1_column_5" width="376"></colgroup>
                   <tbody>
                     <tr class="el-table__row"  v-for="(marketplace,index) in userData.marketplaces"  :key="marketplace.id">
