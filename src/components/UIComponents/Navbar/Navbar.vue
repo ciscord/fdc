@@ -16,6 +16,11 @@
     </div>
   </nav>
 </template>
+<style>
+  .navbar-expand-lg .navbar-collapse{
+    display: none !important;
+  }
+</style>
 <script>
   import {CollapseTransition} from 'vue2-transitions';
 
