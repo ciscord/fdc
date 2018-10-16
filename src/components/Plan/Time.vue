@@ -8,12 +8,14 @@
         
     <!-- user market place table -->
     <div class="row">
-      <div class="col-lg-6 card1 table-responsive text-center">
+      <div class="col-lg-8 style-paper text-center">
         <h4>Schedules</h4>
         <div class="row">
-          <div class="col-lg-4"><a href="#!" @click="makeCurrent" class="btn btn-waves">Make Current</a></div>
-          <div class="col-lg-4">
-            <el-select size="large" placeholder="Single Select" v-model="selects.simple" @change="myFunction()">
+          <div class="col-lg-4 col-sm-4">
+            <a href="#!" @click="makeCurrent" class="btn btn-round btn-linkedin col-lg-12">Make Current</a>
+          </div>
+          <div class="col-lg-4 col-sm-4">
+            <el-select size="large" placeholder="Single Select" class="schedule-select" v-model="selects.simple" @change="myFunction()">
               <el-option v-for="option in schedulesData"                             
                           :value="option.entity_id"
                           :label="option.name"
@@ -21,44 +23,58 @@
               </el-option>
             </el-select>
           </div>
-          <div class="col-lg-4"><a href="#!" @click="deleeteTime" class="btn btn-waves">Delete</a></div>
+          <div class="col-lg-4 col-sm-4">
+            <a href="#!" @click="deleeteTime" class="btn btn-round btn-youtube col-lg-12">Delete</a>
+          </div>
         </div>
-        <table v-if="schedulesData.length != 0" cellspacing="0" cellpadding="0" border="0" class="el-table ">
-          <thead class="has-gutter">
-            <tr><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
-          </thead>
-          <tbody>
-            <tr v-for="(activity, index) in schedulesData[currentIndex].activities"  :key="activity.id">
-              <td>{{activity.name}}</td>
-              <td>{{activity.frequency}}</td>
-              <td>{{activity.hours}}</td>
-              <td style="width: 18%; height:50px;"><a href="#!" @click="deleete(index)"><i class="fa fa-times"></i></a></td>
-            </tr>
-            <tr>
-              <td>
-                <div class="input-field">
-                  <input class="form-control" placeholder="Activity" ref="activity" v-model="input.activity" id="activity" type="text">
-                </div>
-              </td>
-              <td>
-                <div class="input-field">
-                  <input class="form-control"  placeholder="Frequency" v-model="input.frequency" id="frequency" type="number">
-                </div>
-              </td>
-              <td>
-                <div class="input-field">
-                  <input class="form-control"  placeholder="Hours" v-model="input.hours" id="hours" type="number">
-                </div>
-              </td>
-              <td><a href="#!" @click="add" class="btn btn-waves">add</a></td>
-            </tr>
-          </tbody>
-        </table>
+        <hr>
+        <div class="col-lg-12 schedules-table-content">
+          <table v-if="schedulesData.length != 0" cellspacing="0" cellpadding="0" border="0" class="el-table mx-auto">
+            <thead class="has-gutter">
+              <tr class="text-primary"><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
+            </thead>
+            <tbody>
+              <tr v-for="(activity, index) in schedulesData[currentIndex].activities"  :key="activity.id">
+                <td>{{activity.name}}</td>
+                <td>{{activity.frequency}}</td>
+                <td>{{activity.hours}}</td>
+                <td style="width: 18%; height:50px;" class="text-right">
+                  <div class="cell">
+                    <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm">
+                     <i class="fa fa-times"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="input-field col-lg-10 pl-0">
+                    <input class="form-control" placeholder="Activity" ref="activity" v-model="input.activity" id="activity" type="text">
+                  </div>
+                </td>
+                <td>
+                  <div class="input-field col-lg-10 pl-0">
+                    <input class="form-control"  placeholder="Frequency" v-model="input.frequency" id="frequency" type="number">
+                  </div>
+                </td>
+                <td>
+                  <div class="input-field col-lg-10 pl-0">
+                    <input class="form-control"  placeholder="Hours" v-model="input.hours" id="hours" type="number">
+                  </div>
+                </td>
+                <td class="text-right">
+                  <div class="cell">
+                    <a  @click="add" class="btn btn-success btn-icon add-btn"><i class="fa fa-plus"></i></a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="col-lg-6 card1 table-responsive">
-        
-        <table cellspacing="0" cellpadding="0" border="0" class="mt-5">
+      <div class="col-lg-3 style-paper schedules-data-table mx-auto">
+        <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
           <tbody>
             <tr>
               <td><strong>Hours Allocated:</strong></td>
@@ -76,7 +92,6 @@
               <td><strong>Weekly Potential:</strong></td>
               <td v-if="schedulesData.length != 0">${{hoursRate*schedulesData[currentIndex].available}}</td>
             </tr>
-
           </tbody>
         </table>
       </div>
@@ -84,6 +99,46 @@
 
   </div>
 </template>
+<style>
+  .style-paper {
+    -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    background-color: #fff;
+    border: 0;
+    border-radius: 12px;
+    box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
+    color: #252422;
+    margin: 0px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+}
+  .el-input--suffix .el-input__inner {
+    border-radius: 20px;
+    border:2px solid #51cbce;
+    margin-top:10px;
+  }
+  .el-select .el-input .el-select__caret{
+    margin-top:5px;
+  }
+  .el-input--suffix .el-input__inner:hover {
+    background-color: #51cbce;
+  }
+  .schedules-table-content {
+    margin-top: 30px;
+  }
+  .add-btn {
+    color: white !important;
+  }
+  .schedules-data-table {
+    height: 100%;
+  }
+  .schedule-select {
+    width: 100%;
+  }
+</style>
 <script>
 import Vue from "vue";
 import { AmplifyEventBus } from "aws-amplify-vue";
