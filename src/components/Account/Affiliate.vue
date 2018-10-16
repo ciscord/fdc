@@ -7,24 +7,52 @@
         :is-full-page="fullPage"></loading>
         
     <div class="row">
-      <div class="col-lg-12 col-sm-3">
-        
-        <h4><b> Affiliate Info</b></h4>
-        
-        <h5><b>Your Affiliate ID:</b>{{affiliateId}}</h5>
-        <h5><b>Your Affiliate Link:</b><a v-if="affiliateId" :href="'https://app.freelancedevelopercoach.com/sign-up/?affiliate-id=' + affiliateId">https://app.freelancedevelopercoach.com/sign-up/?affiliate-id{{affiliateId}}</a></h5><br>
-        <h4><b>Summary</b></h4>
-        <h5><b>Total Pending:</b>${{affiliatePending}}</h5>
-        <h5><b>Total Paid:</b>${{affiliatePaid}}</h5>
+      <div class="col-lg-12 col-sm-12 row affiliate-info">
+        <div class="style-paper col-lg-9">
+          <h4> Affiliate Info</h4>
+          <hr>
+          <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
+            <tbody>
+              <tr>
+                <td><b>Your Affiliate ID</b></td>
+                <td>{{affiliateId}}</td>
+              </tr>
+              <tr>
+                <td><b>Your Affiliate Link</b></td>
+                <td><a v-if="affiliateId" :href="'https://app.freelancedevelopercoach.com/sign-up/?affiliate-id=' + affiliateId">https://app.freelancedevelopercoach.com/sign-up/?affiliate-id{{affiliateId}}</a></td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <h6><b> </b></h6>
+          <h6><b> </b></h6><br> -->
+        </div>
+        <div class="style-paper summary-cont col-lg-3 ml-auto">
+          <h4>Summary</h4>
+          <hr>
+          <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
+            <tbody>
+              <tr>
+                <td><b>Total Pending</b></td>
+                <td>${{affiliatePending}}</td>
+              </tr>
+              <tr>
+                <td><b>Total Paid</b></td>
+                <td>${{affiliatePaid}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <h6><b> </b></h6>
+          <h6><b></b></h6> -->
+        </div>
       </div>
     </div>
     <!-- user market place table -->
     <div class="row">
-      <div class="col-lg-12 card1 table-responsive">
+      <div class="col-lg-12 style-paper">
         <h4>Transaction History</h4>
         <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
           <thead class="has-gutter">
-            <tr><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
+            <tr class="text-primary"><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
           </thead>
           <tbody>
             <tr v-for="(affiliate) in affiliateData"  :key="affiliate.id">
@@ -40,6 +68,47 @@
 
   </div>
 </template>
+<style scoped>
+@media only screen and (max-width: 991px) {
+  .summary-cont{
+    margin-right: 0 !important;
+  }
+}
+
+  .style-paper {
+    -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+    background-color: #fff;
+    border: 0;
+    border-radius: 12px;
+    box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
+    color: #252422;
+    margin: 0px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+}
+.content {
+  margin-left: 20px;
+}
+.el-table::before {
+  height: 0px;
+}
+.el-table tbody tr:hover {
+  background-color: #f5f7fa !important;
+}
+.summary-cont {
+  margin-right: -15px;
+}
+.affiliate-info {
+  padding-right: 0;
+}
+h6 {
+  text-transform: none;
+}
+</style>
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
