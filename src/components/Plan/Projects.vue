@@ -8,44 +8,44 @@
         
     <!-- user market place table -->
     <div class="row">
-      <div class="col-lg-12 col-sm-12 card1 table-responsive">
+      <div class="col-lg-12 col-sm-12 style-paper table-responsive">
         
         <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
           <thead class="has-gutter">
-            <tr><th v-for="column in columns1" :key="column.id">{{column}}</th></tr>
+            <tr class="text-primary"><th class="text-center" v-for="column in columns1" :key="column.id">{{column}}</th></tr>
           </thead>
           <tbody>
             <tr v-for="(project,index) in projectData"  :key="project.id">
               <td></td>
-              <td>{{project.name}}</td>
-              <td>{{project.hours_per_week}}</td>
-              <td>{{(project.fixed_or_hourly == 0? 'hourly':'fixed')}}</td>
-              <td>{{project.start_date}}</td>
-              <td>{{project.end_date}}</td>
-              <td>{{project.total_hours}}</td>
-              <td>${{project.hourly_rate}}</td>
-              <td>${{project.total_fee}}</td>
-              <td v-if="project.status==0">Proposed</td>
-              <td v-if="project.status==1">Active</td>
-              <td v-if="project.status==2">Consider</td>
+              <td class="text-center">{{project.name}}</td>
+              <td class="text-center">{{project.hours_per_week}}</td>
+              <td class="text-center">{{(project.fixed_or_hourly == 0? 'hourly':'fixed')}}</td>
+              <td class="text-center">{{project.start_date}}</td>
+              <td class="text-center">{{project.end_date}}</td>
+              <td class="text-center">{{project.total_hours}}</td>
+              <td class="text-center">${{project.hourly_rate}}</td>
+              <td class="text-center">${{project.total_fee}}</td>
+              <td class="text-center" v-if="project.status==0">Proposed</td>
+              <td class="text-center" v-if="project.status==1">Active</td>
+              <td class="text-center" v-if="project.status==2">Consider</td>
               
-              <td style="width: 40px; height:50px;"><a href="#!" @click="deleete(index)"><i class="fa fa-times"></i></a></td>
+              <td style="width: 40px; height:50px;" class="text-right"><button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
             </tr>
             <tr>
               <td></td>
               <td>
-                <div class="input-field">
-                  <input class="form-control"  ref="name" placeholder="Name" v-model="input.name" id="projects" type="text">
+                <div class="input-field m-2">
+                  <input class="form-control plan-projects-input-style"  ref="name" placeholder="Name" v-model="input.name" id="projects" type="text">
                 </div>
               </td>
               <td>
-                <div class="input-field">
-                  <input class="form-control"  ref="hours_week" placeholder="Hours Week" v-model="input.hours_week" id="hours_week" type="number">
+                <div class="input-field m-2">
+                  <input class="form-control plan-projects-input-style"  ref="hours_week" placeholder="Hours Week" v-model="input.hours_week" id="hours_week" type="number">
                 </div>
               </td>
               <td>
-                <div class="input-field">
-                  <select v-on:change="changeJobType($event)" v-model="input.fixed_hourly">
+                <div class="input-field m-2">
+                  <select class="text-primary plan-projects-select" v-on:change="changeJobType($event)" v-model="input.fixed_hourly">
                     <option selected="selected" value="Hourly">Hourly</option>
                     <option value="Fixed">Fixed</option>
                   </select>
@@ -53,42 +53,42 @@
               </td>
 
               <td>
-                <div class="input-field">
-                  <datepicker :value="input.startDate" v-model="input.startDate"  format="yyyy-MM-dd"></datepicker>
+                <div class="input-field m-2 mx-auto">
+                  <datepicker :value="input.startDate" class="mx-auto plan-projects-input-style" v-model="input.startDate" format="yyyy-MM-dd"></datepicker>
                 </div>
               </td>
 
               <td>
-                <div class="input-field">
-                  <datepicker :value="input.endDate" v-model="input.endDate"  format="yyyy-MM-dd"></datepicker>
+                <div class="input-field m-2 mx-auto ">
+                  <datepicker :value="input.endDate" class="mx-auto plan-projects-input-style" v-model="input.endDate" format="yyyy-MM-dd"></datepicker>
                 </div>
               </td>
 
               <td>
-                <div class="input-field">
-                  <input class="form-control"  ref="totalHours" placeholder="Total Hours" v-model="input.totalHours" id="totalHours" type="number">
+                <div class="input-field m-2 mx-auto">
+                  <input class="form-control plan-projects-input-style"  ref="totalHours" placeholder="Total Hours" v-model="input.totalHours" id="totalHours" type="number">
                 </div>
               </td>
               <td>
-                <div class="input-field">
-                  <input class="form-control"  ref="hourlyRate" placeholder="Hourly Rate" v-model="input.hourlyRate" id="hourlyRate" type="number">
+                <div class="input-field m-2 mx-auto">
+                  <input class="form-control plan-projects-input-style"  ref="hourlyRate" placeholder="Hourly Rate" v-model="input.hourlyRate" id="hourlyRate" type="number">
                 </div>
               </td>
               <td>
-                <div class="input-field">
-                  <input class="form-control"  ref="totalFee" placeholder="TotalFee" v-model="input.totalFee" id="totalFee" type="number">
+                <div class="input-field m-2 mx-auto">
+                  <input class="form-control plan-projects-input-style"  ref="totalFee" placeholder="TotalFee" v-model="input.totalFee" id="totalFee" type="number">
                 </div>
               </td>
               <td>
-                <div class="input-field">
-                  <select v-on:change="changeStatus($event)" v-model="input.status">
+                <div class="input-field pr-3 m-2 mx-auto">
+                  <select class="text-primary plan-projects-select" v-on:change="changeStatus($event)" v-model="input.status">
                     <option selected="selected" value="Proposed">Proposed</option>
                     <option value="Active">Active</option>
                     <option value="Consider">Consider</option>
                   </select>
                 </div>
               </td>
-              <td><a href="#!" @click="add" class="btn btn-waves">add</a></td>
+              <td  class="text-right"><a  @click="add" class="btn btn-success btn-icon add-btn"><i class="fa fa-plus"></i></a></td>
             </tr>
           </tbody>
         </table>
@@ -96,11 +96,11 @@
       </div>
       
 
-      <div class="col-lg-6  col-sm-12 card1 table-responsive text-center">
+      <div class="col-lg-6  col-sm-12 style-paper text-center">
         <!-- projectionsData table -->
-        <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
+        <table cellspacing="0" cellpadding="0" border="0" class="el-table plan-projects-table">
           <thead class="has-gutter">
-            <tr><th v-for="column in columns2" :key="column.id">{{column}}</th></tr>
+            <tr class="text-primary"><th v-for="column in columns2" :key="column.id">{{column}}</th></tr>
           </thead>
           <tbody>
 
@@ -116,8 +116,7 @@
           </tbody>
         </table>
       </div>
-
-      <div class="col-lg-6  col-sm-12 card1 table-responsive text-center">
+      <div class="col-lg-5 ml-auto plan-project-chart  col-sm-12 style-paper text-center">
         <!-- <small class="text-center">Cumulative Increased Earnings Over Time</small> -->
         <line-chart :data="chartData" :curve="false"></line-chart>
       </div>
@@ -126,6 +125,41 @@
 
   </div>
 </template>
+<style>
+  .plan-projects-select {
+    background-color: white;
+    padding: 5px;
+    border: 1px solid #51cbce;
+    border-radius: 3px;
+  }
+  .plan-projects-input-style {
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+  }
+  .vdp-datepicker input {
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+    padding:5px;
+    background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    color: #66615b;
+    line-height: normal;
+    font-size: 14px;
+    -webkit-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    -moz-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    -o-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    -ms-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  .plan-project-chart {
+    height: 100%;
+  }
+</style>
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
