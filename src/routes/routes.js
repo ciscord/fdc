@@ -143,16 +143,25 @@ let signupPage = {
   component: Authenticator
 }
 
-let logoutPage = {
-  path:'/logout',
-  name: 'Logout',
-  component: Logout
-}
-
-let passwordResetPage = {
-  path: '/passwordreset',
-  name: 'Password Reset',
-  component: PasswordReset
+let HomeMenu = {
+  
+  path: '/home',
+  component: DashboardLayout,
+  meta: { 
+    requiresAuth: true
+  },
+  children: [
+    {
+      path:'logout',
+      name: 'Logout',
+      component: Logout
+    },
+    {
+      path: 'passwordreset',
+      name: 'Password Reset',
+      component: PasswordReset
+    }
+  ]
 }
 
 const routes = [
@@ -167,8 +176,7 @@ const routes = [
   GrowMenu,
   signinPage,
   signupPage,
-  logoutPage,
-  passwordResetPage,
+  HomeMenu,
   {path: '*', component: NotFound}
 ];
 

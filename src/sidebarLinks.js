@@ -9,12 +9,12 @@ export default [
       {
         name: 'Logout',
         icon: 'fa fa-sign-out',
-        path: '/logout'
+        path: '/home/logout'
       },
       {
         name: 'Password Reset',
         icon: 'fa fa-unlock-alt',
-        path: '/passwordreset'
+        path: '/home/passwordreset'
       }
     ]
   },

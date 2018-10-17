@@ -143,24 +143,6 @@ import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   components: { Loading },
-
-  async beforeCreate() {
-    try {
-      this.account = await Auth.currentAuthenticatedUser();
-      this.signedIn = true;
-    } catch (err) {
-      this.signedIn = false;
-    }
-    AmplifyEventBus.$on("authState", async info => {
-      if (info === "signedIn") {
-        this.signedIn = true;
-        this.account = await Auth.currentAuthenticatedUser();
-      } else {
-        this.signedIn = false;
-      }
-    });
-  },
-
   mounted() {
     this.getProfile();
   },
