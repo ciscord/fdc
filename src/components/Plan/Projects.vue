@@ -16,7 +16,8 @@
           </thead>
           <tbody>
             <tr v-for="(project,index) in projectData"  :key="project.id">
-              <td></td>
+              <td v-if="project.checked"><input type="checkbox" checked v-model="project.checked" @change="checkUncheck()"></td>
+              <td v-if="!project.checked"><input type="checkbox" checked v-model="project.checked" @change="checkUncheck()"></td>
               <td class="text-center">{{project.name}}</td>
               <td class="text-center">{{project.hours_per_week}}</td>
               <td class="text-center">{{(project.fixed_or_hourly == 0? 'hourly':'fixed')}}</td>
@@ -266,6 +267,10 @@ export default {
       this.isLoading = true;
       getProjectsAPI().then(data => {
         this.projectData = data;
+        this.projectData.forEach(function(project, index)
+        {
+          project.checked = true
+        })
         console.log(JSON.stringify(this.projectData));
         this.isLoading = false;
         this.getWeeklyReport()
@@ -340,6 +345,10 @@ export default {
       this.getWeeklyReport()
     },
 
+    checkUncheck:function() {
+      this.getWeeklyReport()
+    },
+
 
     /////////-------------- calculate modules -----------------
 
@@ -395,21 +404,24 @@ export default {
         let _weekself = this
         this.projectData.forEach(function(project, index)
         {
-          if (d >= new Date(project.start_date) && d <= new Date(project.end_date)) {
+          if (project.checked) {
+            if (d >= new Date(project.start_date) && d <= new Date(project.end_date)) {
             // console.log('include date' + d)
 
-            if( project.fixed_hourly == 0)//hourly
-            {
-              _weekself.weekTotalHours += project.hours_per_week
-              _weekself.weekTotalEarned += project.hourly_rate * project.hours_per_week
-            }else //fixed
-            {
-              let hourlyRate = project.total_fee/project.total_hours
-              _weekself.weekTotalHours += project.hours_per_week
-              _weekself.weekTotalEarned += hourlyRate * project.hours_per_week
-            }
+              if( project.fixed_hourly == 0)//hourly
+              {
+                _weekself.weekTotalHours += project.hours_per_week
+                _weekself.weekTotalEarned += project.hourly_rate * project.hours_per_week
+              }else //fixed
+              {
+                let hourlyRate = project.total_fee/project.total_hours
+                _weekself.weekTotalHours += project.hours_per_week
+                _weekself.weekTotalEarned += hourlyRate * project.hours_per_week
+              }
 
+            }
           }
+          
 
         })
       }
