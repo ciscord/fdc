@@ -55,11 +55,15 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     
     Auth.currentAuthenticatedUser()
-      .then(user => {
+      .then(async user => {
         if (!user) {
           next({ path: '/signin', query: { redirect: to.fullPath }});
           return;
         }
+
+        let session = await Auth.currentSession();
+        localStorage.setItem("jwtToken", session.idToken.jwtToken)
+        // console.log(localStorage.getItem('jwtToken'))
         next();
       })
       .catch(e => next({ path: '/signin', query: { redirect: to.fullPath }}));
