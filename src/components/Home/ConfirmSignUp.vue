@@ -25,7 +25,7 @@
         <a v-bind:class="amplifyUI.a" v-on:click="signIn">Sign In</a>
       </span>
     </div>
-    <div class="error" v-if="error">
+    <div class="error" v-if="error != 'Valid username not received.'">
       {{ error }}
     </div>
   </div>
