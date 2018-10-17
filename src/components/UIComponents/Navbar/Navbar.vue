@@ -20,6 +20,12 @@
   .navbar-expand-lg .navbar-collapse{
     display: none !important;
   }
+  .router-link-exact-active .active {
+    margin: 10px 36px 0 5px !important;
+  }
+  .ps__scrollbar-y-rail {
+    right: 5px !important;
+  }
 </style>
 <script>
   import {CollapseTransition} from 'vue2-transitions';
