@@ -100,16 +100,16 @@
         <!-- projectionsData table -->
         <table cellspacing="0" cellpadding="0" border="0" class="el-table plan-projects-table">
           <thead class="has-gutter">
-            <tr class="text-primary"><th v-for="column in columns2" :key="column.id">{{column}}</th></tr>
+            <tr class="text-primary"><th class="text-center" v-for="column in columns2" :key="column.id">{{column}}</th></tr>
           </thead>
           <tbody>
 
             <tr v-for="(weeklyStatus) in weeklyStatusData"  :key="weeklyStatus.id">
               
-              <td >{{weeklyStatus.weekof | moment("MMM D, YYYY")}}</td>
-              <td >{{weeklyStatus.hours}}</td>
-              <td >{{weeklyStatus.earned.toFixed(0)}}</td>
-              <td >{{(weeklyStatus.earned/weeklyStatus.hours).toFixed(2)}}</td>
+              <td class="text-center">{{weeklyStatus.weekof | moment("MMM D, YYYY")}}</td>
+              <td class="text-center">{{weeklyStatus.hours}}</td>
+              <td class="text-center">{{weeklyStatus.earned.toFixed(0)}}</td>
+              <td class="text-center">{{(weeklyStatus.earned/weeklyStatus.hours).toFixed(2)}}</td>
               
               
             </tr>
