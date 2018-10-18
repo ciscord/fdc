@@ -126,7 +126,15 @@
 
   </div>
 </template>
+<style scoped>
+  .vdp-datepicker input {
+    margin: 0 auto;
+  }
+</style>
 <style>
+  .el-table--group::after, .el-table--border::after, .el-table::before {
+    background-color: transparent !important; 
+  }
   .plan-projects-select {
     background-color: white;
     padding: 5px;
@@ -141,7 +149,6 @@
   .vdp-datepicker input {
     width: 80%;
     display: block;
-    margin: 0 auto;
     padding:5px;
     background-color: #FFFFFF;
     border: 1px solid #DDDDDD;

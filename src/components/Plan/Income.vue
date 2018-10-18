@@ -15,7 +15,7 @@
           </thead>
           <tbody>
             <tr v-for="(income,index) in incomeData" class="row-hover"  :key="income.id">
-              <td style="width: 40px; height:50px;">{{income.observation_month}}</td>
+              <td>{{income.observation_month}}</td>
               <td>{{income.num_projects}}</td>
               <td>{{income.num_hours}}</td>
               <td>${{income.total_income}}</td>
@@ -27,7 +27,7 @@
             </tr>
             <tr>
               <td>
-                <div class="input-field">
+                <div class="input-field text-left">
                   <datepicker :value="input.month" v-model="input.month" format="yyyy-MM-dd"></datepicker>
                 </div>
               </td>
