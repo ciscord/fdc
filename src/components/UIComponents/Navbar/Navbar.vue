@@ -21,7 +21,7 @@
     display: none !important;
   }
   .router-link-exact-active .active {
-    margin: 10px 36px 0 5px !important;
+    margin: 10px 36px 0 15px !important;
   }
   .ps__scrollbar-y-rail {
     right: 5px !important;
