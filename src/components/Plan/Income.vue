@@ -55,7 +55,8 @@
       </div>
       <div class="col-lg-5 col-sm-12 style-paper text-center chart-cont">
         <small class="text-center">Cumulative Increased Earnings Over Time</small>
-        <line-chart :data="chartData" :curve="false"></line-chart>
+        <line-chart :data="chartData" :dataset="{borderWidth:1}" :curve="false" :colors="['#51cbce', '#ef8157', '#6bd098','#66615b', '#cac4ae']" ></line-chart>
+
       </div>
     </div>
 <!-- // submit button -->
@@ -82,13 +83,11 @@
     <div class="row">
       <a href="#!" @click="updateIncome" class="btn btn-success">Save</a>
     </div>
-
-
   </div>
 </template>
 <style scoped>
     .style-paper {
-        -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+      -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
       -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
       -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
       -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
@@ -154,7 +153,6 @@ export default {
       }
     });
   },
-
   mounted() {
     this.getIncome();
     this.getProjections();

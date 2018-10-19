@@ -119,7 +119,7 @@
       </div>
       <div class="col-lg-5 ml-auto plan-project-chart  col-sm-12 style-paper text-center">
         <!-- <small class="text-center">Cumulative Increased Earnings Over Time</small> -->
-        <line-chart :data="chartData" :curve="false"></line-chart>
+        <line-chart :data="chartData" :dataset="{borderWidth:1}" :curve="false" :colors="['#51cbce', '#ef8157', '#6bd098','#66615b', '#cac4ae']"></line-chart>
       </div>
     </div>
 
