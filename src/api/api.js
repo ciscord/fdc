@@ -30,6 +30,11 @@ export const getSchedulesAPI = params => { return axios.get(`${base}/schedules`,
 export const updateSchedulesAPI = params => { return axios.put(`${base}/schedules`, params, { headers: {
     Authorization: 'Bearer ' + localStorage.getItem('jwtToken') //the token is a variable which holds the token
   }}).then(res => res.data); };
+export const addSchedulesAPI = params => { return axios.post(`${base}/schedules`, params, { headers: {
+    Authorization: 'Bearer ' + localStorage.getItem('jwtToken') //the token is a variable which holds the token
+  }}).then(res => res.data); };
+
+  
 
 export const getProjectsAPI = params => { return axios.get(`${base}/projects`, { headers: {
     Authorization: 'Bearer ' + localStorage.getItem('jwtToken') //the token is a variable which holds the token

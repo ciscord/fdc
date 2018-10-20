@@ -1,6 +1,7 @@
+
 <template>
   <div class="vld-parent">
-    <!-- user profile -->
+    
 
     <loading :active.sync="isLoading" 
     :can-cancel="true" 
@@ -15,12 +16,13 @@
             <a href="#!" @click="makeCurrent" class="btn btn-success make-current-btn-mobile-size">Make Current</a>
           </div>
           <div class="col-lg-4 col-sm-4">
-            <el-select size="large" placeholder="Single Select" class="schedule-select" v-model="selects.simple" @change="myFunction()">
+            <el-select size="large" placeholder="Single Select" class="schedule-select" v-model="selects.simple" @change="selectSchedule()">
               <el-option v-for="option in schedulesData"                             
                           :value="option.entity_id"
                           :label="option.name"
                           :key="option.entity_id">
               </el-option>
+              <el-option value="-1" label="Add New..." key="-1"/>
             </el-select>
           </div>
           <div class="col-lg-4 col-sm-4 text-right">
@@ -28,6 +30,12 @@
           </div>
         </div>
         <hr>
+        <div v-if="selects.simple == -1" class="col-lg-12 schedules-table-content">
+          <h4 class="card-title">Add Schedule</h4>
+          
+         
+        </div>
+        
         <div class="col-lg-12 schedules-table-content">
           <table v-if="schedulesData.length != 0" cellspacing="0" cellpadding="0" border="0" class="el-table mx-auto">
             <thead class="has-gutter">
@@ -98,9 +106,55 @@
       </div>
     </div>
 
+<!-- modal -->
+    <div v-if="showModal" class="modal-backdrop in"></div>
+    <div v-if="showModal" class="modal ">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-body">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click="hideDialog">&times;</button>
+                <h4 class="modal-title text-center">Add Schedule</h4>
+              <fg-input  placeholder="Name" type="schedule" name="schedule" @input="changeScheduleName()" v-model="input.schedule" ></fg-input>
+              <div class="text-danger invalid-feedback" style="display: block;" v-show="validScheduleName">
+                The schedule value is not valid.
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary " @click="addSchedule" :disabled="validScheduleName">Submit</button>
+            </div>
+        </div>
+    </div>
   </div>
+
+  </div>
+
+  
+
 </template>
+
+
 <style>
+.modal-active{
+	display:block;
+}
+.modal-backdrop.in {
+    filter: alpha(opacity=50);
+    opacity: .5;
+}
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    display: block;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
   .style-paper {
     -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
     -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
@@ -161,7 +215,7 @@
 import Vue from "vue";
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
-import { getSchedulesAPI, updateSchedulesAPI } from "./../../api/api";
+import { getSchedulesAPI, updateSchedulesAPI, addSchedulesAPI } from "./../../api/api";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import {
@@ -175,28 +229,13 @@ import {
   Option
 } from "element-ui";
 
+
 export default {
+
   components: {
     Loading,
     [Select.name]: Select,
     [Option.name]: Option
-  },
-
-  async beforeCreate() {
-    try {
-      this.account = await Auth.currentAuthenticatedUser();
-      this.signedIn = true;
-    } catch (err) {
-      this.signedIn = false;
-    }
-    AmplifyEventBus.$on("authState", async info => {
-      if (info === "signedIn") {
-        this.signedIn = true;
-        this.account = await Auth.currentAuthenticatedUser();
-      } else {
-        this.signedIn = false;
-      }
-    });
   },
 
   mounted() {
@@ -205,8 +244,15 @@ export default {
 
   data() {
     return {
+      //for modal input
+      showModal:false,
+      scheduleName:'',
+
+      //loading
       isLoading: false,
       fullPage: true,
+
+      //data
       schedulesData: [],
       hoursRate: 25,
 
@@ -220,17 +266,27 @@ export default {
       input: {
         activity: "",
         frequency: "",
-        hours: ""
+        hours: "",
+        schedule: ""
       },
       editInput: {
         activity: "",
         frequency: "",
         hours: ""
-      }
+      },
+      modelValidations: {
+        schedule: {
+          required: true,
+          is_not: "current"
+        }
+      },
+      validScheduleName:false,
+
     };
   },
 
   methods: {
+    
     getSchedules() {
       this.isLoading = true;
       getSchedulesAPI().then(data => {
@@ -267,6 +323,17 @@ export default {
     },
 
     makeCurrent: function() {},
+
+    changeScheduleName:function () {
+      
+      if (this.input.schedule.toLowerCase() != 'current' && this.input.schedule != '') {
+        
+        this.validScheduleName = false
+      }else {
+        console.log(this.input.schedule)
+        this.validScheduleName = true
+      }
+    },
     add: function() {
       if (this.input.activity === "") {
         this.$refs.activity.focus();
@@ -295,6 +362,27 @@ export default {
       this.$refs.activity.focus();
       // this.updateSchedules()
     },
+    hideDialog:function() {
+      this.showModal = false
+    },
+    addSchedule:function() {
+      if (this.input.schedule == '') {
+        return
+      }
+
+      let params = {
+        "user_id": this.$store.getters.user.username,
+        "name": this.input.schedule,
+        "is_current": false,
+        "allocated": 0,
+        "available": 168,
+        "activities": []
+      }
+      addSchedulesAPI(params).then(data => {
+        this.getSchedules();
+        this.showModal = false
+      });
+    },
     //function to defintely delete data
     deleete: function(index) {
       this.schedulesData.splice(index, 1);
@@ -302,16 +390,25 @@ export default {
 
     deleeteTime: function() {},
 
-    myFunction: function() {
+    selectSchedule: function() {
       var context = this;
       Vue.nextTick(function() {
-        for (var i = 0; i < context.schedulesData.length; i++) {
-          let schedule = context.schedulesData[i];
-          if (schedule.entity_id == context.selects.simple) {
-            context.currentIndex = i;
-            break;
+          var selectIndex = -1
+          for (var i = 0; i < context.schedulesData.length; i++) {
+            let schedule = context.schedulesData[i];
+            if (schedule.entity_id == context.selects.simple) {
+              context.currentIndex = i;
+              selectIndex = i;
+              break;
+            }
           }
-        }
+          console.log('test'+selectIndex)
+          if (selectIndex == -1) {
+            context.showModal = true
+            context.currentIndex = 0
+          }
+        
+        
       });
     }
   }
