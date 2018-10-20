@@ -119,14 +119,22 @@
       </div>
       <div class="col-lg-5 ml-auto plan-project-chart  col-sm-12 style-paper text-center">
         <!-- <small class="text-center">Cumulative Increased Earnings Over Time</small> -->
-        <line-chart :data="chartData" :curve="false"></line-chart>
+        <line-chart :data="chartData" :dataset="{borderWidth:1}" :curve="false" :colors="['#51cbce', '#ef8157', '#6bd098','#66615b', '#cac4ae']"></line-chart>
       </div>
     </div>
 
 
   </div>
 </template>
+<style scoped>
+  .vdp-datepicker input {
+    margin: 0 auto;
+  }
+</style>
 <style>
+  .el-table--group::after, .el-table--border::after, .el-table::before {
+    background-color: transparent !important; 
+  }
   .plan-projects-select {
     background-color: white;
     padding: 5px;
@@ -141,7 +149,6 @@
   .vdp-datepicker input {
     width: 80%;
     display: block;
-    margin: 0 auto;
     padding:5px;
     background-color: #FFFFFF;
     border: 1px solid #DDDDDD;
