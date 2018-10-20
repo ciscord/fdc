@@ -39,11 +39,11 @@ import { AmplifyEventBus } from "aws-amplify-vue";
 import * as AmplifyUI from "@aws-amplify/ui";
 
 export default {
-  name: "ForgotPassword",
+  name: "PasswordReset",
   props: ["forgotPasswordConfig"],
   data() {
     return {
-      username: "",
+      username: '',
       code: "",
       password: "",
       error: "",
@@ -53,15 +53,22 @@ export default {
     };
   },
   computed: {
+    
     options() {
       const defaults = {
-        header: "Forgot Password"
+        header: "Reset Password"
       };
       return Object.assign(defaults, this.forgotPasswordConfig || {});
     }
   },
   mounted() {
     this.logger = new this.$Amplify.Logger(this.$options.name);
+    // this.username = this.$store.getters.user.attributes.email;
+    this.username = this.$store.getters.user.attributes.email
+
+    if (this.username != undefined && this.username != '') {
+      this.submit()
+    }
   },
   methods: {
     submit: function() {
@@ -79,7 +86,9 @@ export default {
         this.password
       )
         .then(() => {
+          this.error = "Your password updated successfully!"
           alert("Your password updated successfully!");
+          
         })
         .catch(e => this.setError(e));
     },
