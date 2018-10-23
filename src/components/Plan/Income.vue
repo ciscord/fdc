@@ -117,6 +117,7 @@
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
+import { mapActions } from 'vuex';
 
 import {
   getProjectionsAPI,
@@ -153,6 +154,9 @@ export default {
       }
     });
   },
+  created() {
+    this.setNavbarTitle('Income');
+  },
   mounted() {
     this.getIncome();
     this.getProjections();
@@ -185,6 +189,8 @@ export default {
   },
 
   methods: {
+    ...mapActions('UI', ['setNavbarTitle']),
+    
     getProjections() {
       this.isLoading = true;
       getProjectionsAPI().then(data => {

@@ -5,7 +5,7 @@
              tag="li">
     <a v-if="isMenu"
        data-toggle="collapse"
-       href="#"
+       disabled
        @click.prevent="collapseMenu">
       <i :class="link.icon"></i>
       
@@ -29,7 +29,7 @@
         @click.native.stop="onItemClick"
         :href="link.path">
         <template v-if="addLink">
-          <span class="sidebar-mini-icon">&nbsp</span>
+          <span class="sidebar-mini-icon" v-if="!$sidebar.isMinimized">&nbsp;</span>
           <i :class="link.icon"></i>
           <span class="sidebar-normal">{{link.name}}</span>
         </template>
@@ -41,6 +41,7 @@
     </slot>
   </component>
 </template>
+
 <script>
   import { CollapseTransition } from 'vue2-transitions';
 
@@ -122,7 +123,7 @@
         this.collapsed = !this.collapsed
       },
       onItemClick() {
-        if(this.autoClose) {
+        if (this.autoClose) {
           this.$sidebar.showSidebar = false;
         }
       }

@@ -171,6 +171,7 @@
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
+import { mapActions } from 'vuex';
 Vue.use(require("vue-moment"));
 import {
   getProjectionsAPI,
@@ -210,6 +211,10 @@ export default {
         this.signedIn = false;
       }
     });
+  },
+
+  created() {
+    this.setNavbarTitle('Projects');
   },
 
   mounted() {
@@ -260,6 +265,8 @@ export default {
   },
 
   methods: {
+    ...mapActions('UI', ['setNavbarTitle']),
+
     changeJobType: function (event) {
       this.input.fixed_hourly = event.target.value;
     },
