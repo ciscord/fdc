@@ -12,7 +12,7 @@
 
         </navbar-toggle-button>
       </div>
-      <a class="navbar-brand" href="#pablo">Freelance Developer Coach</a>
+      <a class="navbar-brand" href="#pablo">{{ navbarTitle }}</a>
     </div>
 
     <template slot="navbar-menu">
@@ -68,6 +68,7 @@
 </template>
 <script>
   import { Navbar, NavbarToggleButton } from 'src/components/UIComponents'
+  import { mapGetters } from 'vuex'
 
   export default {
     components: {
@@ -79,6 +80,9 @@
         activeNotifications: false,
         showNavbar: false
       }
+    },
+    computed: {
+        ...mapGetters('UI', ['navbarTitle'])
     },
     methods: {
       capitalizeFirstLetter(string) {

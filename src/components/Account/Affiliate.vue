@@ -114,6 +114,7 @@ import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
 import { getAffiliateAPI, getProfileAPI } from "./../../api/api";
 import Loading from "vue-loading-overlay";
+import { mapActions } from 'vuex';
 
 import "vue-loading-overlay/dist/vue-loading.css";
 import Vue from "vue";
@@ -138,6 +139,10 @@ export default {
     });
   },
 
+  created() {
+    this.setNavbarTitle('Affilate');
+  },
+
   mounted() {
     this.getAffiliate();
     this.getProfile();
@@ -159,6 +164,8 @@ export default {
   },
 
   methods: {
+    ...mapActions('UI', ['setNavbarTitle']),
+    
     getProfile() {
       getProfileAPI().then(data => {
         this.isLoading = false;

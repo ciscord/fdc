@@ -138,6 +138,7 @@ import { Auth } from "aws-amplify";
 import axios from "axios";
 import { getProfileAPI, updateProfileAPI } from "./../../api/api";
 import Loading from "vue-loading-overlay";
+import { mapActions } from 'vuex';
 
 import "vue-loading-overlay/dist/vue-loading.css";
 
@@ -150,6 +151,9 @@ export default {
     }
   },
   components: { Loading },
+  created() {
+    this.setNavbarTitle('Profile');
+  },
   mounted() {
     this.getProfile();
   },
@@ -199,6 +203,8 @@ export default {
   },
 
   methods: {
+    ...mapActions('UI', ['setNavbarTitle']),
+    
     getProfile() {
       this.isLoading = true;
       getProfileAPI().then(data => {

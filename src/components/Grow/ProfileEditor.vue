@@ -4,8 +4,15 @@
   </div>
 </template>
 <script>
+  import { mapActions } from 'vuex';
  
   export default {
+    created() {
+      this.setNavbarTitle('Profile Editor');
+    },
+    methods: {
+      ...mapActions('UI', ['setNavbarTitle']),
+    },
     components: {
       
     }

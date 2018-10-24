@@ -36,7 +36,8 @@
 
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
-import * as AmplifyUI from "@aws-amplify/ui";
+import * as amplifyUI from "@aws-amplify/ui";
+import { mapActions } from 'vuex';
 
 export default {
   name: "PasswordReset",
@@ -49,17 +50,19 @@ export default {
       error: "",
       sent: false,
       logger: {},
-      amplifyUI: AmplifyUI
+      amplifyUI
     };
   },
   computed: {
-    
     options() {
       const defaults = {
         header: "Reset Password"
       };
       return Object.assign(defaults, this.forgotPasswordConfig || {});
     }
+  },
+  created() {
+    this.setNavbarTitle('Reset Password');
   },
   mounted() {
     this.logger = new this.$Amplify.Logger(this.$options.name);
@@ -71,6 +74,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions('UI', ['setNavbarTitle']),
+
     submit: function() {
       this.$Amplify.Auth.forgotPassword(this.username)
         .then(() => {

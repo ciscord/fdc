@@ -218,6 +218,7 @@ import { Auth } from "aws-amplify";
 import { getSchedulesAPI, updateSchedulesAPI, addSchedulesAPI } from "./../../api/api";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
+import { mapActions } from 'vuex';
 import {
   DatePicker,
   TimeSelect,
@@ -236,6 +237,10 @@ export default {
     Loading,
     [Select.name]: Select,
     [Option.name]: Option
+  },
+
+  created() {
+    this.setNavbarTitle('Time');
   },
 
   mounted() {
@@ -286,6 +291,7 @@ export default {
   },
 
   methods: {
+    ...mapActions('UI', ['setNavbarTitle']),
     
     getSchedules() {
       this.isLoading = true;
