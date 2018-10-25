@@ -106,4 +106,8 @@
       display: none;
     }
   }
+
+  .logo:after {
+    display: none !important;
+  }
 </style>

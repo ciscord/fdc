@@ -153,4 +153,8 @@
   .caret.rotated {
     transform: rotate(180deg);
   }
+  .sidebar-mini .active a:after,
+  .sidebar-mini .active a:before {
+    display: none !important;
+  }
 </style>

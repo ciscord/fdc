@@ -9,12 +9,15 @@
     <!-- user market place table -->
     <div class="row">
       <div class="col-lg-6 col-sm-12 style-paper">
-        <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
+        <div style="text-align: center;">
+          <h4>Title</h4>
+        </div>
+        <table cellspacing="0" cellpadding="0" border="0" class="el-table">
           <thead class="has-gutter">
             <tr class="text-primary"><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
           </thead>
           <tbody>
-            <tr v-for="(income,index) in incomeData" class="row-hover"  :key="income.id">
+            <tr v-for="(income,index) in incomeData" :key="income.id">
               <td>{{income.observation_month}}</td>
               <td>{{income.num_projects}}</td>
               <td>{{income.num_hours}}</td>
@@ -28,7 +31,13 @@
             <tr>
               <td>
                 <div class="input-field text-left">
-                  <datepicker :value="input.month" v-model="input.month" format="yyyy-MM-dd"></datepicker>
+                  <datepicker
+                      :value="input.month"
+                      v-model="input.month"
+                      format="yyyy-MM-dd"
+                      calendar-button-icon="far fa-calendar-alt"
+                      :calendar-button="true">
+                  </datepicker>
                 </div>
               </td>
               <td>
@@ -54,21 +63,25 @@
         <!-- projectionsData table -->
       </div>
       <div class="col-lg-5 col-sm-12 style-paper text-center chart-cont">
-        <small class="text-center">Cumulative Increased Earnings Over Time</small>
+        <div style="text-align: center;">
+          <h4>Cumulative Increased Earnings Over Time</h4>
+        </div>
         <line-chart :data="chartData" :dataset="{borderWidth:1}" :curve="false" :colors="['#51cbce', '#ef8157', '#6bd098','#66615b', '#cac4ae']" ></line-chart>
-
       </div>
     </div>
 <!-- // submit button -->
       <div class="row">
         <div class="col-lg-6 col-sm-12 style-paper">
-          <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
+          <div style="text-align: center;">
+            <h4>Title</h4>
+          </div>
+          <table cellspacing="0" cellpadding="0" border="0" class="el-table">
             <thead class="has-gutter">
               <tr><th></th><th class="text-primary" v-for="column in projectionsData.years" :key="column.id">{{column}}</th></tr>
             </thead>
             <tbody>
 
-              <tr v-for="(projection) in projectionsData.data"  :key="projection.id" class="row-hover">
+              <tr v-for="(projection) in projectionsData.data"  :key="projection.id">
                 <td v-if="projection.scenario != 'Difference'">{{projection.scenario}}</td>
                 <th v-if="projection.scenario == 'Difference'">{{projection.scenario}}</th>
                 <td v-for="(totalincome) in projection.totalincomes"  :key="totalincome.id">
@@ -93,7 +106,7 @@
       -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
       background-color: #fff;
       border: 0;
-      border-radius: 12px;
+      border-radius: 3px;
       box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
       color: #252422;
       margin: 0px;
@@ -328,5 +341,12 @@ export default {
 .vdp-datepicker__calendar {
   position: fixed;
   display: block;
+}
+.vdp-datepicker__calendar-button {
+  position: absolute;
+  display: block;
+  padding: 5px;
+  float: right;
+  right: 32px;
 }
 </style>

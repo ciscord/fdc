@@ -2,10 +2,9 @@
   <navbar :show-navbar="showNavbar">
     <div class="navbar-wrapper">
       <div class="navbar-minimize">
-        <button id="minimizeSidebar" class="btn btn-icon btn-round" @click="minimizeSidebar">
-          <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
-          <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
-        </button>
+        <div id="minimizeSidebar" @click="minimizeSidebar">
+          <i class="fas fa-bars text-center burger-icon"/>
+        </div>
       </div>
       <div class="navbar-toggle">
         <navbar-toggle-button @click.native="toggleSidebar">
@@ -110,6 +109,9 @@
   }
 
 </script>
-<style>
-
+<style scoped>
+  .burger-icon {
+    font-size: 24px;
+    cursor: pointer;
+  }
 </style>
