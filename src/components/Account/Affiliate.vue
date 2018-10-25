@@ -11,11 +11,11 @@
         <div class="style-paper col-lg-9">
           <h4> Affiliate Info</h4>
           <hr>
-          <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
+          <table cellspacing="0" cellpadding="0" border="0" class="el-table">
             <tbody>
               <tr>
                 <td><b>Your Affiliate ID</b></td>
-                <td>{{affiliateId}}</td>
+                <td>{{ affiliateId }}</td>
               </tr>
               <tr>
                 <td><b>Your Affiliate Link</b></td>
@@ -33,11 +33,11 @@
             <tbody>
               <tr>
                 <td><b>Total Pending</b></td>
-                <td>${{affiliatePending}}</td>
+                <td>${{ affiliatePending }}</td>
               </tr>
               <tr>
                 <td><b>Total Paid</b></td>
-                <td>${{affiliatePaid}}</td>
+                <td>${{ affiliatePaid }}</td>
               </tr>
             </tbody>
           </table>
@@ -69,11 +69,11 @@
   </div>
 </template>
 <style scoped>
-@media only screen and (max-width: 991px) {
-  .summary-cont{
-    margin-right: 0 !important;
+  @media only screen and (max-width: 991px) {
+    .summary-cont{
+      margin-right: 0 !important;
+    }
   }
-}
 
   .style-paper {
     -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
@@ -82,7 +82,7 @@
     -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
     background-color: #fff;
     border: 0;
-    border-radius: 12px;
+    border-radius: 3px;
     box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
     color: #252422;
     margin: 0px;

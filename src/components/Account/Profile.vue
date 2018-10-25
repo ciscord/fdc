@@ -100,7 +100,7 @@
     -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
     background-color: #fff;
     border: 0;
-    border-radius: 12px;
+    border-radius: 3px;
     box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
     color: #252422;
     margin: 0px;

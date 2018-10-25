@@ -44,6 +44,7 @@ Vue.use(SideBar, { sidebarLinks: sidebarLinks })
 Vue.use(VeeValidate)
 locale.use(lang)
 
+
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes
