@@ -32,7 +32,7 @@
               
               <td style="width: 40px; height:50px;" class="text-right"><button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
             </tr>
-            <tr>
+            <tr class="last-row">
               <td></td>
               <td>
                 <div class="input-field m-2">
@@ -55,13 +55,27 @@
 
               <td>
                 <div class="input-field m-2 mx-auto">
-                  <datepicker :value="input.startDate" class="mx-auto plan-projects-input-style" v-model="input.startDate" format="yyyy-MM-dd"></datepicker>
+                  <datepicker
+                      :value="input.startDate"
+                      class="mx-auto plan-projects-input-style"
+                      v-model="input.startDate"
+                      format="yyyy-MM-dd"
+                      calendar-button-icon="far fa-calendar-alt"
+                      :calendar-button="true">
+                  </datepicker>
                 </div>
               </td>
 
               <td>
                 <div class="input-field m-2 mx-auto ">
-                  <datepicker :value="input.endDate" class="mx-auto plan-projects-input-style" v-model="input.endDate" format="yyyy-MM-dd"></datepicker>
+                  <datepicker
+                      :value="input.startDate"
+                      class="mx-auto plan-projects-input-style"
+                      v-model="input.startDate"
+                      format="yyyy-MM-dd"
+                      calendar-button-icon="far fa-calendar-alt"
+                      :calendar-button="true">
+                  </datepicker>
                 </div>
               </td>
 
@@ -89,7 +103,9 @@
                   </select>
                 </div>
               </td>
-              <td  class="text-right"><a  @click="add" class="btn btn-success btn-icon add-btn"><i class="fa fa-plus"></i></a></td>
+              <td  class="text-right">
+                <a  @click="add" class="btn btn-success add-btn"><i class="fa fa-plus" style="margin-right: 5px;"/> Add new</a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -97,7 +113,7 @@
       </div>
       
 
-      <div class="col-lg-6  col-sm-12 style-paper text-center">
+      <div class="col-lg-6 col-sm-12 style-paper text-center">
         <!-- projectionsData table -->
         <table cellspacing="0" cellpadding="0" border="0" class="el-table plan-projects-table">
           <thead class="has-gutter">
@@ -105,7 +121,10 @@
           </thead>
           <tbody>
 
-            <tr v-for="(weeklyStatus) in weeklyStatusData"  :key="weeklyStatus.id">
+            <tr
+                v-for="(weeklyStatus, id) in weeklyStatusData"
+                :key="weeklyStatus.id"
+                :class="[weeklyStatusData.length === id + 1 ? 'last-row' : '']">
               
               <td class="text-center">{{weeklyStatus.weekof | moment("MMM D, YYYY")}}</td>
               <td class="text-center">{{weeklyStatus.hours}}</td>
@@ -117,9 +136,11 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-5 ml-auto plan-project-chart  col-sm-12 style-paper text-center">
+      <div class="col-lg-6 plan-project-chart col-sm-12 text-center remove-paddings">
+        <div class="margin-left col-lg-12 col-sm-12 style-paper">
         <!-- <small class="text-center">Cumulative Increased Earnings Over Time</small> -->
-        <line-chart :data="chartData" :dataset="{borderWidth:1}" :curve="false" :colors="['#51cbce', '#ef8157', '#6bd098','#66615b', '#cac4ae']"></line-chart>
+          <line-chart :data="chartData" :dataset="{borderWidth:1}" :curve="false" :colors="['#51cbce', '#ef8157', '#6bd098','#66615b', '#cac4ae']"></line-chart>
+        </div>
       </div>
     </div>
 
@@ -129,6 +150,20 @@
 <style scoped>
   .vdp-datepicker input {
     margin: 0 auto;
+  }
+  @media (max-width: 991px) {
+    .remove-paddings {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  @media (min-width: 992px) {
+    .remove-paddings {
+      padding-right: 0;
+    }
+    /* .margin-left {
+      margin-left: 30px;
+    } */
   }
 </style>
 <style>
@@ -508,6 +543,9 @@ export default {
 };
 </script>
 <style lang="scss">
+.el-table .last-row td {
+  border-bottom: none;
+}
 .vdp-datepicker__calendar {
   position: fixed;
   display: block;

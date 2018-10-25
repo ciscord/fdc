@@ -1,35 +1,41 @@
 <template>
-  <div class="vld-parent">
+  <div class="vld-parent row">
     <!-- user profile -->
     
         <loading :active.sync="isLoading" 
         :can-cancel="true" 
         :is-full-page="fullPage"></loading>
         
-    <div class="row style-paper">
-        <div class="form-group col-md-4">
-          <h4 class="card-title">Email address</h4>
-          <fg-input  type="email" name="email" v-validate="modelValidations.email" :error="getError('email')" v-model="userData.email"></fg-input>
-        </div>
-        <div class="form-group col-md-4">
-          <h4 class="card-title">First Name</h4>
-          <fg-input  type="firstname" name="firstname" v-validate="modelValidations.firstname" :error="getError('firstname')" v-model="userData.firstname"></fg-input>
-        </div>
-        <div class="form-group col-md-4">
-          <h4 class="card-title">Last Name</h4>
-          <fg-input  type="lastname" name="lastname" v-validate="modelValidations.lastname" :error="getError('lastname')" v-model="userData.lastname" ></fg-input>
-        </div>
+    <div class="style-paper col-md-3 padding-top">
+      <div class="form-group">
+        <h6 class="card-title">Email address</h6>
+        <fg-input  type="email" name="email" v-validate="modelValidations.email" :error="getError('email')" v-model="userData.email"></fg-input>
+      </div>
+      <div class="form-group">
+        <h6 class="card-title">First Name</h6>
+        <fg-input  type="firstname" name="firstname" v-validate="modelValidations.firstname" :error="getError('firstname')" v-model="userData.firstname"></fg-input>
+      </div>
+      <div class="form-group">
+        <h6 class="card-title">Last Name</h6>
+        <fg-input  type="lastname" name="lastname" v-validate="modelValidations.lastname" :error="getError('lastname')" v-model="userData.lastname" ></fg-input>
+      </div>
     </div>
     <!-- user market place table -->
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title">Which marketplaces (Upwork, Golance, Fiverr, etc.) do you use?</h5>
-      </div>
-      <div class="card-body row">
-        <div class="col-sm-12">
-          <div class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition">
-            <div class="hidden-columns">
-              <div></div><div></div><div></div><div></div><div></div></div>
+    <div class="col-md-9 padding-left">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Which marketplaces (Upwork, Golance, Fiverr, etc.) do you use?</h5>
+        </div>
+        <div class="card-body row">
+          <div class="col-sm-12">
+            <div class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition">
+              <div class="hidden-columns">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
               <div class="el-table__header-wrapper">
                 <table cellspacing="0" cellpadding="0" border="0" class="marketplaces-table">
                   <thead class="has-gutter">
@@ -56,12 +62,12 @@
                       <td rowspan="1" colspan="1" class="is-right action-buttons td-actions">
                         <div class="cell">
                           <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm">
-                           <i class="fa fa-times"></i>
+                            <i class="fa fa-times"></i>
                           </button>
                         </div>
                       </td>
                     </tr>
-                    <tr>
+                    <tr class="last-row">
                       <td rowspan="1" colspan="3" class="el-table_1_column_2  ">
                         <div class="input-field">
                           <input class="form-control" placeholder="Name" ref="name" v-model="input.name" id="name" type="text">
@@ -74,43 +80,50 @@
                       </td>
                       <td rowspan="1" colspan="2" class="el-table_1_column_5 is-right action-buttons td-actions">
                         <div class="cell">
-                          <a  @click="add" class="btn btn-success btn-icon add-btn"><i class="fa fa-plus"></i></a>
+                          <a @click="add" class="btn btn-success add-btn"><i class="fa fa-plus" style="margin-right: 5px;"/> Add new</a>
                         </div>
                       </td>
-                    </tr>
-                    <tr>
-                      <th rowspan="1" colspan="5" class="el-table_1_column_5 is-right action-buttons td-actions">
-                        <div class="row save-button-row">
-                          <a href="#!" @click="updateProfile" class="btn btn-primary">Save</a>
-                        </div>
-                      </th>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <div class="el-table__column-resize-proxy" style="display: none;"></div></div></div></div>
-         </div>
+              <div class="el-table__column-resize-proxy" style="display: none;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row save-button">
+      <a href="#!" @click="updateProfile" class="btn btn-primary">Save</a>
+    </div>
   </div>
 </template>
-<style scoped>
-  .style-paper {
-      -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    background-color: #fff;
-    border: 0;
-    border-radius: 3px;
-    box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
-    color: #252422;
-    margin: 0px;
-    margin-bottom: 20px;
-    position: relative;
-    transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+<style scoped lang="scss">
+@media (min-width: 992px) {
+  .padding-left {
+    padding-left: 20px;
+  }
 }
-.save-button-row {
+.style-paper {
+    -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  background-color: #fff;
+  border: 0;
+  border-radius: 3px;
+  box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
+  color: #252422;
+  margin: 0px;
+  margin-bottom: 20px;
+  position: relative;
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+}
+
+.save-button {
   display:block;
   text-align: center;
+  margin-left: 0;
 }
 .add-btn {
   color: white !important;
@@ -130,6 +143,15 @@
 }
 .marketplaces-table tbody tr:hover {
   background-color: red !important;
+}
+.card {
+  border-radius: 3px !important;
+}
+.card .card-body {
+  padding-top: 0;
+}
+.padding-top {
+  padding-top: 20px;
 }
 </style>
 <script>
@@ -256,6 +278,14 @@ export default {
   button.btn {
     margin-right: 5px;
   }
+}
+
+// .style-paper input {
+//   width: 300px;
+// }
+
+.el-table .last-row td {
+  border-bottom: none;
 }
 
 .card1 {

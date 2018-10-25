@@ -8,7 +8,7 @@
         
     <div class="row">
       <div class="col-lg-12 col-sm-12 row affiliate-info">
-        <div class="style-paper col-lg-9">
+        <div class="style-paper col-lg-7">
           <h4> Affiliate Info</h4>
           <hr>
           <table cellspacing="0" cellpadding="0" border="0" class="el-table">
@@ -17,7 +17,7 @@
                 <td><b>Your Affiliate ID</b></td>
                 <td>{{ affiliateId }}</td>
               </tr>
-              <tr>
+              <tr class="last-row">
                 <td><b>Your Affiliate Link</b></td>
                 <td><a v-if="affiliateId" :href="'https://app.freelancedevelopercoach.com/sign-up/?affiliate-id=' + affiliateId">https://app.freelancedevelopercoach.com/sign-up/?affiliate-id{{affiliateId}}</a></td>
               </tr>
@@ -26,7 +26,7 @@
           <!-- <h6><b> </b></h6>
           <h6><b> </b></h6><br> -->
         </div>
-        <div class="style-paper summary-cont col-lg-3 ml-auto">
+        <div class="style-paper summary-cont col-lg-5 ml-auto">
           <h4>Summary</h4>
           <hr>
           <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
@@ -35,7 +35,7 @@
                 <td><b>Total Pending</b></td>
                 <td>${{ affiliatePending }}</td>
               </tr>
-              <tr>
+              <tr class="last-row">
                 <td><b>Total Paid</b></td>
                 <td>${{ affiliatePaid }}</td>
               </tr>
@@ -48,21 +48,25 @@
     </div>
     <!-- user market place table -->
     <div class="row">
-      <div class="col-lg-12 style-paper">
-        <h4>Transaction History</h4>
-        <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
-          <thead class="has-gutter">
-            <tr class="text-primary"><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
-          </thead>
-          <tbody>
-            <tr v-for="(affiliate) in affiliateData"  :key="affiliate.id">
-              <td>{{ affiliate.timestamp | moment("MMM D, YYYY") }}</td>
-              <td>{{affiliate.action}}</td>
-              <td>${{affiliate.amount}}</td>
-              <td>{{affiliate.status}}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="col-lg-12 col-sm-12 row affiliate-info">
+        <div class="style-paper col-lg-7">
+          <h4>Transaction History</h4>
+          <table cellspacing="0" cellpadding="0" border="0" class="el-table ">
+            <thead class="has-gutter">
+              <tr class="text-primary"><th v-for="column in columns" :key="column.id">{{column}}</th></tr>
+            </thead>
+            <tbody>
+              <tr
+                  v-for="(affiliate, id) in affiliateData"  :key="affiliate.id"
+                  :class="[affiliateData.length === id + 1 ? 'last-row' : '']">
+                <td>{{ affiliate.timestamp | moment("MMM D, YYYY") }}</td>
+                <td>{{affiliate.action}}</td>
+                <td>${{affiliate.amount}}</td>
+                <td>{{affiliate.status}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -75,29 +79,26 @@
     }
   }
 
-  .style-paper {
-    -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    background-color: #fff;
-    border: 0;
-    border-radius: 3px;
-    box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
-    color: #252422;
-    margin: 0px;
-    margin-bottom: 20px;
-    position: relative;
-    transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+.style-paper {
+  -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  background-color: #fff;
+  border: 0;
+  border-radius: 3px;
+  box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
+  color: #252422;
+  margin: 0px;
+  margin-bottom: 20px;
+  position: relative;
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
 }
 .content {
   margin-left: 20px;
 }
 .el-table::before {
   height: 0px;
-}
-.el-table tbody tr:hover {
-  background-color: #f5f7fa !important;
 }
 .summary-cont {
   margin-right: -15px;
@@ -197,11 +198,24 @@ export default {
   }
 };
 </script>
+
 <style lang="scss">
+.el-table .last-row td {
+  border-bottom: none;
+}
+
 .el-table .td-actions {
   button.btn {
     margin-right: 5px;
   }
+}
+
+.vdp-datepicker__calendar-button {
+  position: absolute;
+  display: block;
+  padding: 5px;
+  float: right;
+  right: 32px;
 }
 
 .card1 {
