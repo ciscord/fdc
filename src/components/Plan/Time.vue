@@ -59,7 +59,7 @@
                   </div>
                 </td>
               </tr>
-              <tr>
+              <tr class="last-row">
                 <td></td>
                 <td>
                   <div class="input-field col-lg-10 pl-0">
@@ -103,7 +103,7 @@
                 <td><strong>Hours Rate:</strong></td>
                 <td>${{hoursRate}}</td>
               </tr>
-              <tr>
+              <tr class="last-row">
                 <td><strong>Weekly Potential:</strong></td>
                 <td v-if="schedulesData.length != 0">${{hoursRate*schedulesData[currentIndex].available}}</td>
               </tr>
@@ -377,6 +377,9 @@ export default {
 </script>
 
 <style>
+.el-table .last-row td {
+  border-bottom: none;
+}
 .modal-active{
 	display:block;
 }

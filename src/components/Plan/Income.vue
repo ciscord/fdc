@@ -28,7 +28,7 @@
                 <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button>
               </td>
             </tr>
-            <tr>
+            <tr class="last-row">
               <td>
                 <div class="input-field text-left">
                   <datepicker
@@ -56,7 +56,7 @@
                 </div>
               </td>
               <td></td>
-              <a  @click="add" class="btn btn-success btn-icon add-btn"><i class="fa fa-plus"></i></a>
+              <a  @click="add" class="btn btn-success add-btn"><i class="fa fa-plus" style="margin-right: 5px;"/> Add new</a>
             </tr>
           </tbody>
         </table>
@@ -81,7 +81,7 @@
             </thead>
             <tbody>
 
-              <tr v-for="(projection) in projectionsData.data"  :key="projection.id">
+              <tr v-for="(projection, id) in projectionsData.data"  :key="projection.id" :class="[projectionsData.data.length === id + 1 ? 'last-row' : '']">
                 <td v-if="projection.scenario != 'Difference'">{{projection.scenario}}</td>
                 <th v-if="projection.scenario == 'Difference'">{{projection.scenario}}</th>
                 <td v-for="(totalincome) in projection.totalincomes"  :key="totalincome.id">
@@ -98,35 +98,7 @@
     </div>
   </div>
 </template>
-<style scoped>
-    .style-paper {
-      -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-      -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-      -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-      -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-      background-color: #fff;
-      border: 0;
-      border-radius: 3px;
-      box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
-      color: #252422;
-      margin: 0px;
-      margin-bottom: 20px;
-      position: relative;
-      transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-  }
-  .add-btn {
-    color: white !important;
-  }
-  .chart-cont {
-    margin-left: 20px;
-  }
-  #projects {
-    margin-left: 3px;
-  }
-  .row-hover:hover {
-    background-color: #f5f7fa !important;
-  }
-</style>
+
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
@@ -337,7 +309,11 @@ export default {
   }
 };
 </script>
+
 <style lang="scss">
+.el-table .last-row td {
+  border-bottom: none;
+}
 .vdp-datepicker__calendar {
   position: fixed;
   display: block;
@@ -349,4 +325,34 @@ export default {
   float: right;
   right: 32px;
 }
+</style>
+
+<style scoped>
+    .style-paper {
+      -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+      -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+      -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+      -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+      background-color: #fff;
+      border: 0;
+      border-radius: 3px;
+      box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
+      color: #252422;
+      margin: 0px;
+      margin-bottom: 20px;
+      position: relative;
+      transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  }
+  .add-btn {
+    color: white !important;
+  }
+  .chart-cont {
+    margin-left: 20px;
+  }
+  #projects {
+    margin-left: 3px;
+  }
+  .row-hover:hover {
+    background-color: #f5f7fa !important;
+  }
 </style>
