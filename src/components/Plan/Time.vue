@@ -1,7 +1,6 @@
 
 <template>
   <div class="vld-parent">
-    
 
     <loading :active.sync="isLoading" 
     :can-cancel="true" 
@@ -32,7 +31,6 @@
         <hr>
         <div v-if="selects.simple == -1" class="col-lg-12 schedules-table-content">
           <h4 class="card-title">Add Schedule</h4>
-          
          
         </div>
         
@@ -49,7 +47,7 @@
                 <td>{{activity.hours}}</td>
                 <td style="width: 18%; height:50px;" class="text-right">
                   <div class="cell">
-                    <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm">
+                    <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm" v-show="activity.deleteable">
                      <i class="fa fa-times"></i>
                     </button>
                   </div>
@@ -58,7 +56,10 @@
               <tr>
                 <td>
                   <div class="input-field col-lg-10 pl-0">
-                    <input class="form-control" placeholder="Activity" ref="activity" v-model="input.activity" id="activity" type="text">
+                    <input class="form-control" placeholder="Activity" ref="activity" @input="changeActivity()" v-model="input.activity" id="activity" type="text">
+                  </div>
+                  <div class="text-danger invalid-feedback" v-show="validActivityName" style="display: block;">
+                    Invaild name.
                   </div>
                 </td>
                 <td>
@@ -135,87 +136,96 @@
 
 
 <style>
-.modal-active{
-	display:block;
+.modal-active {
+  display: block;
 }
 .modal-backdrop.in {
-    filter: alpha(opacity=50);
-    opacity: .5;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
 }
 .modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1050;
-    display: block;
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-    outline: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  display: block;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
 }
 
-  .style-paper {
-    -moz-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    -ms-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    -o-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    -webkit-transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
-    background-color: #fff;
-    border: 0;
-    border-radius: 12px;
-    box-shadow: 0 6px 10px -4px rgba(0,0,0,.15);
-    color: #252422;
-    margin: 0px;
-    margin-bottom: 20px;
-    position: relative;
-    transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+.style-paper {
+  -moz-transition: transform 0.3s cubic-bezier(0.34, 2, 0.6, 1),
+    box-shadow 0.2s ease;
+  -ms-transition: transform 0.3s cubic-bezier(0.34, 2, 0.6, 1),
+    box-shadow 0.2s ease;
+  -o-transition: transform 0.3s cubic-bezier(0.34, 2, 0.6, 1),
+    box-shadow 0.2s ease;
+  -webkit-transition: transform 0.3s cubic-bezier(0.34, 2, 0.6, 1),
+    box-shadow 0.2s ease;
+  background-color: #fff;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
+  color: #252422;
+  margin: 0px;
+  margin-bottom: 20px;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.34, 2, 0.6, 1), box-shadow 0.2s ease;
 }
-  .el-input--suffix .el-input__inner {
-    margin-top:10px;
-  }
-  .el-select .el-input .el-select__caret{
-    margin-top:5px;
-  }
-  .el-input--suffix .el-input__inner:hover {
-    background-color: #51cbce;
-  }
-  .schedules-table-content {
-    margin-top: 30px;
-  }
-  .add-btn {
-    color: white !important;
-  }
-  .schedules-data-table {
-    height: 100%;
-  }
-  .schedule-select {
+.el-input--suffix .el-input__inner {
+  margin-top: 10px;
+}
+.el-select .el-input .el-select__caret {
+  margin-top: 5px;
+}
+.el-input--suffix .el-input__inner:hover {
+  background-color: #51cbce;
+}
+.schedules-table-content {
+  margin-top: 30px;
+}
+.add-btn {
+  color: white !important;
+}
+.schedules-data-table {
+  height: 100%;
+}
+.schedule-select {
+  width: 100%;
+}
+.btn-lightgreen {
+  background-color: #6bd098;
+}
+.el-select .el-input:hover .el-input__icon,
+.el-select .el-input:hover input {
+  background-color: #51cbce !important;
+}
+.el-select .el-input:hover .el-input__icon,
+.el-select .el-input:hover {
+  background-color: transparent !important;
+}
+
+@media (max-width: 575px) {
+  .make-current-btn-mobile-size {
     width: 100%;
   }
-  .btn-lightgreen {
-    background-color: #6bd098;
+  .delete-btn-mobile-size {
+    width: 100%;
   }
-  .el-select .el-input:hover .el-input__icon, .el-select .el-input:hover input {
-    background-color: #51cbce !important;
-  }
-  .el-select .el-input:hover .el-input__icon, .el-select .el-input:hover {
-    background-color: transparent !important;
-
-  }
-  
-  @media (max-width: 575px){
-    .make-current-btn-mobile-size {
-      width: 100%;
-    }
-    .delete-btn-mobile-size {
-      width: 100%;
-    }
-  }
+}
 </style>
 <script>
 import Vue from "vue";
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
-import { getSchedulesAPI, updateSchedulesAPI, addSchedulesAPI } from "./../../api/api";
+import {
+  getSchedulesAPI,
+  updateSchedulesAPI,
+  addSchedulesAPI
+} from "./../../api/api";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import {
@@ -229,9 +239,7 @@ import {
   Option
 } from "element-ui";
 
-
 export default {
-
   components: {
     Loading,
     [Select.name]: Select,
@@ -245,8 +253,8 @@ export default {
   data() {
     return {
       //for modal input
-      showModal:false,
-      scheduleName:'',
+      showModal: false,
+      scheduleName: "",
 
       //loading
       isLoading: false,
@@ -280,13 +288,12 @@ export default {
           is_not: "current"
         }
       },
-      validScheduleName:false,
-
+      validScheduleName: false,
+      validActivityName: false
     };
   },
 
   methods: {
-    
     getSchedules() {
       this.isLoading = true;
       getSchedulesAPI().then(data => {
@@ -295,13 +302,24 @@ export default {
         this.currentIndex = 0;
         for (var i = 0; i < this.schedulesData.length; i++) {
           let schedule = this.schedulesData[i];
+          for (var j = 0; j < schedule.activities.length; j++) {
+            let activity = schedule.activities[j];
+            if (
+              activity.name.toLowerCase() == "sleep" ||
+              activity.name.toLowerCase() == "eat" ||
+              activity.name.toLowerCase() == "exercise"
+            ) {
+              activity.deleteable = false;
+            } else {
+              activity.deleteable = true;
+            }
+          }
           if (schedule.is_current == true) {
             this.currentIndex = i;
             this.selects.simple = schedule.entity_id;
             break;
           }
         }
-
         this.isLoading = false;
       });
     },
@@ -324,16 +342,31 @@ export default {
 
     makeCurrent: function() {},
 
-    changeScheduleName:function () {
-      
-      if (this.input.schedule.toLowerCase() != 'current' && this.input.schedule != '') {
-        
-        this.validScheduleName = false
-      }else {
-        console.log(this.input.schedule)
-        this.validScheduleName = true
+    changeActivity: function() {
+      if (
+        this.input.activity.toLowerCase() != "sleep" &&
+        this.input.activity != "" &&
+        this.input.activity.toLowerCase() != "eat" &&
+        this.input.activity.toLowerCase() != "exercise"
+      ) {
+        this.validActivityName = false;
+      } else {
+        this.validActivityName = true;
       }
     },
+
+    changeScheduleName: function() {
+      if (
+        this.input.schedule.toLowerCase() != "current" &&
+        this.input.schedule != ""
+      ) {
+        this.validScheduleName = false;
+      } else {
+        console.log(this.input.schedule);
+        this.validScheduleName = true;
+      }
+    },
+
     add: function() {
       if (this.input.activity === "") {
         this.$refs.activity.focus();
@@ -362,26 +395,35 @@ export default {
       this.$refs.activity.focus();
       // this.updateSchedules()
     },
-    hideDialog:function() {
-      this.showModal = false
+    hideDialog: function() {
+      this.showModal = false;
     },
-    addSchedule:function() {
-      if (this.input.schedule == '') {
-        return
+    addSchedule: function() {
+      if (this.input.schedule == "") {
+        return;
       }
 
       let params = {
-        "user_id": this.$store.getters.user.username,
-        "name": this.input.schedule,
-        "is_current": false,
-        "allocated": 0,
-        "available": 168,
-        "activities": []
-      }
-      addSchedulesAPI(params).then(data => {
-        this.getSchedules();
-        this.showModal = false
-      });
+        user_id: this.$store.getters.user.username,
+        name: this.input.schedule,
+        is_current: false,
+        allocated: 0,
+        available: 168,
+        activities: [
+          { name: "Sleep", frequency: 7, hours: 8, deleteable: false },
+          { name: "Eat", frequency: 7, hours: 2, deleteable: false },
+          { name: "Exercise", frequency: 7, hours: 1, deleteable: false }
+        ]
+      };
+      this.schedulesData.push(params);
+
+      this.showModal = false;
+
+      // need to implement addSchedule api integration
+      // addSchedulesAPI(params).then(data => {
+      //   this.getSchedules();
+      // this.showModal = false
+      // });
     },
     //function to defintely delete data
     deleete: function(index) {
@@ -393,22 +435,20 @@ export default {
     selectSchedule: function() {
       var context = this;
       Vue.nextTick(function() {
-          var selectIndex = -1
-          for (var i = 0; i < context.schedulesData.length; i++) {
-            let schedule = context.schedulesData[i];
-            if (schedule.entity_id == context.selects.simple) {
-              context.currentIndex = i;
-              selectIndex = i;
-              break;
-            }
+        var selectIndex = -1;
+        for (var i = 0; i < context.schedulesData.length; i++) {
+          let schedule = context.schedulesData[i];
+          if (schedule.entity_id == context.selects.simple) {
+            context.currentIndex = i;
+            selectIndex = i;
+            break;
           }
-          console.log('test'+selectIndex)
-          if (selectIndex == -1) {
-            context.showModal = true
-            context.currentIndex = 0
-          }
-        
-        
+        }
+        console.log("test" + selectIndex);
+        if (selectIndex == -1) {
+          context.showModal = true;
+          context.currentIndex = 0;
+        }
       });
     }
   }
