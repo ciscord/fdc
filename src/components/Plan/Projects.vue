@@ -26,9 +26,15 @@
               <td class="text-center">{{project.total_hours}}</td>
               <td class="text-center">${{project.hourly_rate}}</td>
               <td class="text-center">${{project.total_fee}}</td>
-              <td class="text-center" v-if="project.status==0">Proposed</td>
-              <td class="text-center" v-if="project.status==1">Active</td>
-              <td class="text-center" v-if="project.status==2">Consider</td>
+              <td class="text-center">
+                <select v-model="project.status" @change="updateProject(project)">
+                  <option
+                      v-for="(status, index) in Object.keys(statusMap)" :key="index"
+                      :value="status">
+                    {{ statusMap[status] }}
+                  </option>
+                </select>
+              </td>
               
               <td style="width: 40px; height:50px;" class="text-right"><button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
             </tr>
@@ -69,9 +75,9 @@
               <td>
                 <div class="input-field m-2 mx-auto ">
                   <datepicker
-                      :value="input.startDate"
+                      :value="input.endDate"
                       class="mx-auto plan-projects-input-style"
-                      v-model="input.startDate"
+                      v-model="input.endDate"
                       format="yyyy-MM-dd"
                       calendar-button-icon="far fa-calendar-alt"
                       :calendar-button="true">
@@ -97,9 +103,12 @@
               <td>
                 <div class="input-field pr-3 m-2 mx-auto">
                   <select class="text-primary plan-projects-select" v-on:change="changeStatus($event)" v-model="input.status">
-                    <option selected="selected" value="Proposed">Proposed</option>
-                    <option value="Active">Active</option>
-                    <option value="Consider">Consider</option>
+                    <option
+                        v-for="(status, index) in Object.keys(statusMap)" :key="index"
+                        :selected="index === 0"
+                        :value="status">
+                      {{ statusMap[status] }}
+                    </option>
                   </select>
                 </div>
               </td>
@@ -147,62 +156,7 @@
 
   </div>
 </template>
-<style scoped>
-  .vdp-datepicker input {
-    margin: 0 auto;
-  }
-  @media (max-width: 991px) {
-    .remove-paddings {
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
-  @media (min-width: 992px) {
-    .remove-paddings {
-      padding-right: 0;
-    }
-    /* .margin-left {
-      margin-left: 30px;
-    } */
-  }
-</style>
-<style>
-  .el-table--group::after, .el-table--border::after, .el-table::before {
-    background-color: transparent !important; 
-  }
-  .plan-projects-select {
-    background-color: white;
-    padding: 5px;
-    border: 1px solid #51cbce;
-    border-radius: 3px;
-  }
-  .plan-projects-input-style {
-    width: 80%;
-    display: block;
-    margin: 0 auto;
-  }
-  .vdp-datepicker input {
-    width: 80%;
-    display: block;
-    padding:5px;
-    background-color: #FFFFFF;
-    border: 1px solid #DDDDDD;
-    border-radius: 4px;
-    color: #66615b;
-    line-height: normal;
-    font-size: 14px;
-    -webkit-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    -moz-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    -o-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    -ms-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-  }
-  .plan-project-chart {
-    height: 100%;
-  }
-</style>
+
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
@@ -211,7 +165,8 @@ Vue.use(require("vue-moment"));
 import {
   getProjectionsAPI,
   getProjectsAPI,
-  addProjectsAPI
+  addProjectsAPI,
+  updateProjectsAPI
 } from "./../../api/api";
 import Loading from "vue-loading-overlay";
 import Datepicker from "vuejs-datepicker";
@@ -220,6 +175,12 @@ import Chart from "chart.js";
 import Vue from "vue";
 Vue.use(VueChartkick, { adapter: Chart });
 import "vue-loading-overlay/dist/vue-loading.css";
+
+const statusMap = {
+  0: 'Proposed',
+  1: 'Active',
+  2: 'Consider'
+};
 
 export default {
   components: {
@@ -259,6 +220,7 @@ export default {
 
   data() {
     return {
+      statusMap,
 
       isLoading: false,
       fullPage: true,
@@ -280,7 +242,7 @@ export default {
         totalHours:"",
         hourlyRate:"",
         totalFee:"",
-        status:"Proposed"
+        status: 0
       },
       editInput: {
         name: "",
@@ -329,6 +291,14 @@ export default {
       this.isLoading = true;
 
       addProjectsAPI(params).then(data => {
+        this.getProjects();
+      });
+    },
+
+    updateProject(project) {
+      this.isLoading = true;
+
+      updateProjectsAPI(project).then(data => {
         this.getProjects();
       });
     },
@@ -542,6 +512,63 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .vdp-datepicker input {
+    margin: 0 auto;
+  }
+  @media (max-width: 991px) {
+    .remove-paddings {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  @media (min-width: 992px) {
+    .remove-paddings {
+      padding-right: 0;
+    }
+    /* .margin-left {
+      margin-left: 30px;
+    } */
+  }
+</style>
+<style>
+  .el-table--group::after, .el-table--border::after, .el-table::before {
+    background-color: transparent !important; 
+  }
+  .plan-projects-select {
+    background-color: white;
+    padding: 5px;
+    border: 1px solid #51cbce;
+    border-radius: 3px;
+  }
+  .plan-projects-input-style {
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+  }
+  .vdp-datepicker input {
+    width: 80%;
+    display: block;
+    padding:5px;
+    background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    color: #66615b;
+    line-height: normal;
+    font-size: 14px;
+    -webkit-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    -moz-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    -o-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    -ms-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  .plan-project-chart {
+    height: 100%;
+  }
+</style>
 <style lang="scss">
 .el-table .last-row td {
   border-bottom: none;

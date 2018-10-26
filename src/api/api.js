@@ -37,8 +37,11 @@ export const addSchedulesAPI = params => { return axios.post(`${base}/schedules`
   
 
 export const getProjectsAPI = params => { return axios.get(`${base}/projects`, { headers: {
-    Authorization: 'Bearer ' + localStorage.getItem('jwtToken') //the token is a variable which holds the token
+    Authorization: 'Bearer ' + localStorage.getItem('jwtToken') // the token is a variable which holds the token
   },params: params }).then(res => res.data); };
-export const addProjectsAPI = params => { return axios.put(`${base}/users`, params, { headers: {
-    Authorization: 'Bearer ' + localStorage.getItem('jwtToken') //the token is a variable which holds the token
+export const addProjectsAPI = params => { return axios.post(`${base}/projects`, params, { headers: {
+    Authorization: 'Bearer ' + localStorage.getItem('jwtToken') // the token is a variable which holds the token
+  }}).then(res => res.data); };
+export const updateProjectsAPI = params => { return axios.put(`${base}/projects`, params, { headers: {
+    Authorization: 'Bearer ' + localStorage.getItem('jwtToken') // the token is a variable which holds the token
   }}).then(res => res.data); };
