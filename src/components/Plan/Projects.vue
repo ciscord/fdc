@@ -163,7 +163,6 @@ import { Auth } from "aws-amplify";
 import { mapActions } from 'vuex';
 Vue.use(require("vue-moment"));
 import {
-  getProjectionsAPI,
   getProjectsAPI,
   addProjectsAPI,
   updateProjectsAPI
@@ -179,7 +178,7 @@ import "vue-loading-overlay/dist/vue-loading.css";
 const statusMap = {
   0: 'Proposed',
   1: 'Active',
-  2: 'Consider'
+  2: 'Lost'
 };
 
 export default {
@@ -215,7 +214,6 @@ export default {
 
   mounted() {
     this.getProjects();
-    this.getProjections();
   },
 
   data() {
@@ -253,7 +251,7 @@ export default {
         totalHours:"",
         hourlyRate:"",
         totalFee:"",
-        status:""
+        status:0
       },
 
       chartData: [],
@@ -269,10 +267,6 @@ export default {
     },
     changeStatus: function (event) {
       this.input.status = event.target.value;
-    },
-
-    getProjections() {
-     
     },
     getProjects() {
       this.isLoading = true;
@@ -296,6 +290,7 @@ export default {
     },
 
     updateProject(project) {
+      project.status = parseInt(project.status)
       this.isLoading = true;
 
       updateProjectsAPI(project).then(data => {
@@ -314,20 +309,18 @@ export default {
     },
 
     add: function() {
-
       let params = {}
 
-      params.user_id = "11134d33-a025-4d50-88a3-c629428ab542"
       params.name = this.input.name
       
-      params.hours_per_week = this.input.hours_week
-      params.total_hours = this.input.totalHours
+      params.hours_per_week = parseFloat(this.input.hours_week)
+      params.total_hours = parseFloat(this.input.totalHours)
       params.start_date = this.input.startDate
       params.end_date = this.input.endDate
       params.fixed_or_hourly = this.input.fixed_hourly
-      params.hourly_rate = this.input.hourlyRate
-      params.total_fee = this.input.totalFee
-      params.status = this.input.status
+      params.hourly_rate = parseFloat(this.input.hourlyRate)
+      params.total_fee = parseFloat(this.input.totalFee)
+      params.status = parseInt(this.input.status)
       
       this.addProjects(params)
 
@@ -336,7 +329,6 @@ export default {
       }
       this.$refs.name.focus();
     },
-    //function to defintely delete data
     deleteProject: function(index) {
       this.projectData.splice(index, 1);
       this.getWeeklyReport()
