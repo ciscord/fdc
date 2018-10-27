@@ -23,9 +23,6 @@
   .router-link-exact-active .active {
     margin: 10px 36px 0 15px !important;
   }
-  .ps__scrollbar-y-rail {
-    right: 5px !important;
-  }
 </style>
 <script>
   import {CollapseTransition} from 'vue2-transitions';
@@ -75,8 +72,3 @@
     }
   }
 </script>
-<style scoped>
-  .navbar-relative {
-    position: relative;
-  }
-</style>

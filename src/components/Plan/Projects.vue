@@ -36,7 +36,7 @@
                 </select>
               </td>
               
-              <td style="width: 40px; height:50px;" class="text-right"><button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
+              <td style="width: 40px; height:50px;" class="text-right"><button @click="deleteProject(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
             </tr>
             <tr class="last-row">
               <td></td>
@@ -314,29 +314,7 @@ export default {
     },
 
     add: function() {
-      
-      // if (this.input.name === "") {
-      //   this.$refs.name.focus();
-      //   return;
-      // }
 
-      // if (this.input.hours_week === "") {
-      //   this.$refs.hours_week.focus();
-      //   return;
-      // }
-
-      // if (this.input.startDate === "" || this.input.endDate) {
-      //   return;
-      // }
-
-      // if (this.input.totalHours === "") {
-      //   this.$refs.totalHours.focus();
-      //   return;
-      // }
-      // if (this.input.totalFee === "") {
-      //   this.$refs.totalFee.focus();
-      //   return;
-      // }
       let params = {}
 
       params.user_id = "11134d33-a025-4d50-88a3-c629428ab542"
@@ -359,7 +337,7 @@ export default {
       this.$refs.name.focus();
     },
     //function to defintely delete data
-    deleete: function(index) {
+    deleteProject: function(index) {
       this.projectData.splice(index, 1);
       this.getWeeklyReport()
     },

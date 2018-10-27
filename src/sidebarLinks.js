@@ -4,18 +4,12 @@ export default [
     name: 'Home',
     icon: 'fa fa-home',
     collapsed: false,
-    children: [
+    children: [{
+      name: 'Dashboard',
+      icon: 'fa fa-tachometer',
+      path: '/home/dashboard'
+    }
 
-      {
-        name: 'Logout',
-        icon: 'fa fa-sign-out',
-        path: '/home/logout'
-      },
-      {
-        name: 'Password Reset',
-        icon: 'fa fa-unlock-alt',
-        path: '/home/passwordreset'
-      }
     ]
   },
   {
@@ -104,7 +98,17 @@ export default [
       name: 'Affiliate',
       icon: 'fa fa-hands-helping',
       path: '/account/affiliate'
-    }
+    },
+      {
+        name: 'Logout',
+        icon: 'fa fa-sign-out',
+        path: '/account/logout'
+      },
+      {
+        name: 'Password Reset',
+        icon: 'fa fa-unlock-alt',
+        path: '/account/passwordreset'
+      }
     ]
   },
 

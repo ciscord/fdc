@@ -21,6 +21,8 @@ import Income from 'src/components/Plan/Income.vue'
 import Projects from 'src/components/Plan/Projects.vue'
 import Time from 'src/components/Plan/Time.vue'
 
+import Dashboard from 'src/components/Home/Dashboard.vue'
+
 // GeneralViews
 import NotFound from '../components/GeneralViews/NotFoundPage.vue'
 
@@ -127,6 +129,16 @@ let AccountMenu = {
       path: 'affiliate',
       name: 'Affiliate',
       component: Affiliate
+    },
+    {
+      path:'logout',
+      name: 'Logout',
+      component: Logout
+    },
+    {
+      path: 'passwordreset',
+      name: 'Password Reset',
+      component: PasswordReset
     }
   ]
 }
@@ -152,14 +164,9 @@ let HomeMenu = {
   },
   children: [
     {
-      path:'logout',
-      name: 'Logout',
-      component: Logout
-    },
-    {
-      path: 'passwordreset',
-      name: 'Password Reset',
-      component: PasswordReset
+      path:'dashboard',
+      name: 'Dashboard',
+      component: Dashboard
     }
   ]
 }
