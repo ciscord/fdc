@@ -175,7 +175,7 @@ const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/account/profile'
+    redirect: '/home/dashboard'
   },
   AccountMenu,
   PlanMenu,

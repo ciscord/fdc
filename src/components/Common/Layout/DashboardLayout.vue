@@ -32,6 +32,12 @@
       CommonContent,
       UserMenu,
     },
+    mounted() {
+        FreshWidget.init("", {"queryString": "&widgetType=popup", "utf8": "✓", "widgetType": "popup",
+          "buttonType": "text", "buttonText": "Support", "buttonColor": "white", "buttonBg": "#006063",
+          "alignment": "2", "offset": "235px", "formHeight": "500px",
+          "url": "https://freelancedevelopercoach.freshdesk.com"});
+    },
     methods: {
       toggleSidebar () {
         if (this.$sidebar.showSidebar) {
