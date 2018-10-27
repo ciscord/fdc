@@ -41,7 +41,6 @@
     </slot>
   </component>
 </template>
-
 <script>
 import { CollapseTransition } from "vue2-transitions";
 import { Analytics } from "aws-amplify";
@@ -108,30 +107,16 @@ export default {
       const index = this.$slots.default.indexOf(item.$vnode);
       this.children.splice(index, 0, item);
     },
-    methods: {
-      addChild(item) {
-        const index = this.$slots.default.indexOf(item.$vnode)
-        this.children.splice(index, 0, item)
-      },
-      removeChild(item) {
-        const tabs = this.children
-        const index = tabs.indexOf(item)
-        tabs.splice(index, 1)
-      },
-      elementType(link, isParent = true) {
-        if (link.isRoute === false) {
-          return isParent ? 'li' : 'a'
-        } else {
-          return 'router-link'
-        }
-      },
-      collapseMenu() {
-        this.collapsed = !this.collapsed
-      },
-      onItemClick() {
-        if (this.autoClose) {
-          this.$sidebar.showSidebar = false;
-        }
+    removeChild(item) {
+      const tabs = this.children;
+      const index = tabs.indexOf(item);
+      tabs.splice(index, 1);
+    },
+    elementType(link, isParent = true) {
+      if (link.isRoute === false) {
+        return isParent ? "li" : "a";
+      } else {
+        return "router-link";
       }
     },
     collapseMenu() {
@@ -208,4 +193,5 @@ export default {
   .sidebar-mini .active a:before {
     display: none !important;
   }
+
 </style>
