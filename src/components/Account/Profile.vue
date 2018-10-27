@@ -134,7 +134,7 @@
 </style>
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
-import { Auth } from "aws-amplify";
+import { Auth, Analytics } from "aws-amplify";
 import axios from "axios";
 import { getProfileAPI, updateProfileAPI } from "./../../api/api";
 import Loading from "vue-loading-overlay";
@@ -209,13 +209,14 @@ export default {
     },
     updateProfile() {
       this.isLoading = true;
-      // var params = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
       updateProfileAPI(this.userData).then(data => {
         this.userData = data;
         this.isLoading = false;
         console.log(JSON.stringify(this.userData));
         this.getProfile();
       });
+
+      Analytics.record({ name: 'account profile update profile' })
     },
     getError(fieldName) {
       return this.errors.first(fieldName);
@@ -237,10 +238,12 @@ export default {
         this.input[key] = "";
       }
       this.$refs.name.focus();
+      Analytics.record({ name: 'account profile add marketplace' })
     },
     //function to defintely delete data
     deleete: function(index) {
       this.userData.marketplaces.splice(index, 1);
+      Analytics.record({ name: 'account profile delete marketplace' })
     }
   }
 };

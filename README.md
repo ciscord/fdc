@@ -76,10 +76,20 @@ example
       EmailVerificationSubject: !Ref emailVerificationSubject
 ```
 
+Add analytics
+```
+$ amplify add analytics
+```
+
 Provisions cloud resources with the latest local developments.
 ```
 $ amplify push
 ```
+
+Amazon Pinpoint Analytics with Amazon Cognito User Pools
+https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-pinpoint-integration.html
+
+
 ### ! Be sure that you have own `.env` file
 
 You can generate .env file manually by running:

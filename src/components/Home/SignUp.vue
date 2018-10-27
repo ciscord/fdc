@@ -63,21 +63,32 @@ import { AmplifyEventBus } from "aws-amplify-vue";
 import Vue from "vue";
 import * as AmplifyUI from "@aws-amplify/ui";
 import { Auth } from "aws-amplify";
-import PayPal from 'vue-paypal-checkout'
+import PayPal from "vue-paypal-checkout";
+import VueCookie from "vue-cookie";
+Vue.use(VueCookie);
 
 export default {
   name: "SignUp",
   components: {
     PayPal
   },
-  
+
   async beforeCreate() {
+    if (this.$route.query["affiliate-id"] != undefined) {
+      Auth.signOut()
+        .then(() => {
+        })
+        .catch(e => this.setError(e));
+
+      this.$cookie.set("affiliate_id", this.$route.query["affiliate-id"], 1);
+      console.log("affiliate" + this.$cookie.get("affiliate_id"));
+    }
     if (process.env.NODE_ENV == "development") {
-      console.log('development')
-      this.development = 'sandbox'
-    }else {
-      console.log('production')
-      this.development = 'production'
+      console.log("development");
+      this.development = "sandbox";
+    } else {
+      console.log("production");
+      this.development = "production";
     }
     try {
       await Auth.currentAuthenticatedUser();
@@ -92,24 +103,22 @@ export default {
         this.signedIn = false;
       }
     });
-    
   },
 
   data() {
     return {
-      development:'production',
-      paidstatus:false,
+      development: "production",
+      paidstatus: false,
       amplifyUI: AmplifyUI,
       error_message: "",
       signedIn: false,
-      credentials : {
+      credentials: {
         sandbox: process.env.VUE_APP_PAYPAL_SANBOX_ID,
         production: process.env.VUE_APP_PAYPAL_PRODUCKTION_ID
       }
     };
   },
   computed: {
-
     options() {
       const defaults = {
         header: "Sign Up",
@@ -132,21 +141,19 @@ export default {
       };
 
       return Object.assign(defaults, this.signUpConfig || {});
-    },
-    
-
+    }
   },
 
   methods: {
-    paypalPaymentAuthorized: function (data) {
-      console.log('data' + data)
+    paypalPaymentAuthorized: function(data) {
+      console.log("data" + data);
     },
-    paypalPaymentCompleted: function (data) {
-      console.log('data1' + data)
-      this.paidstatus = true
+    paypalPaymentCompleted: function(data) {
+      console.log("data1" + data);
+      this.paidstatus = true;
     },
-    paypalPaymentCancelled: function (data) {
-      console.log('data2' + data)
+    paypalPaymentCancelled: function(data) {
+      console.log("data2" + data);
     },
 
     signUp: function() {
@@ -204,19 +211,17 @@ export default {
     },
 
     checkout: function() {
-
       //stripe payment
       this.$checkout.open({
-        name: 'Payment Details',
-        currency: 'USD',
+        name: "Payment Details",
+        currency: "USD",
         amount: 2100,
-        token: (token) => {
-          console.log('token ' + JSON.stringify(token))
-          this.paidstatus = true
-        } 
-      })
-    },
-
+        token: token => {
+          console.log("token " + JSON.stringify(token));
+          this.paidstatus = true;
+        }
+      });
+    }
   }
 };
 </script>

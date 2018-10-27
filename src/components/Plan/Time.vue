@@ -12,7 +12,7 @@
         <h4>Schedules</h4>
         <div class="row">
           <div class="col-lg-4 col-sm-4 text-left">
-            <a href="#!" @click="makeCurrent" class="btn btn-success make-current-btn-mobile-size">Make Current</a>
+            <a @click="makeCurrent" class="btn btn-success make-current-btn-mobile-size">Make Current</a>
           </div>
           <div class="col-lg-4 col-sm-4">
             <el-select size="large" placeholder="Single Select" class="schedule-select" v-model="selects.simple" @change="selectSchedule()">
@@ -25,7 +25,7 @@
             </el-select>
           </div>
           <div class="col-lg-4 col-sm-4 text-right">
-            <a href="#!" @click="deleeteTime" class="btn btn-danger delete-btn-mobile-size">Delete</a>
+            <a  @click="deleeteSchedule" class="btn btn-danger delete-btn-mobile-size">Delete</a>
           </div>
         </div>
         <hr>
@@ -220,7 +220,7 @@
 <script>
 import Vue from "vue";
 import { AmplifyEventBus } from "aws-amplify-vue";
-import { Auth } from "aws-amplify";
+import { Auth, Analytics } from "aws-amplify";
 import {
   getSchedulesAPI,
   updateSchedulesAPI,
@@ -317,7 +317,6 @@ export default {
           if (schedule.is_current == true) {
             this.currentIndex = i;
             this.selects.simple = schedule.entity_id;
-            break;
           }
         }
         this.isLoading = false;
@@ -340,7 +339,9 @@ export default {
       });
     },
 
-    makeCurrent: function() {},
+    makeCurrent: function() {
+      Analytics.record({ name: "plan time make current" });
+    },
 
     changeActivity: function() {
       if (
@@ -362,7 +363,6 @@ export default {
       ) {
         this.validScheduleName = false;
       } else {
-        console.log(this.input.schedule);
         this.validScheduleName = true;
       }
     },
@@ -394,6 +394,7 @@ export default {
       }
       this.$refs.activity.focus();
       // this.updateSchedules()
+      Analytics.record({ name: "plan time add schedule item" });
     },
     hideDialog: function() {
       this.showModal = false;
@@ -402,7 +403,7 @@ export default {
       if (this.input.schedule == "") {
         return;
       }
-
+      Analytics.record({ name: "plan time add schedule" });
       let params = {
         user_id: this.$store.getters.user.username,
         name: this.input.schedule,
@@ -427,13 +428,17 @@ export default {
     },
     //function to defintely delete data
     deleete: function(index) {
-      this.schedulesData.splice(index, 1);
+      Analytics.record({ name: "plan time delete schedule item" });
+      this.schedulesData[this.currentIndex].activities.splice(index, 1);
     },
 
-    deleeteTime: function() {},
+    deleeteSchedule: function() {
+      Analytics.record({ name: "plan time delete schedule" });
+    },
 
     selectSchedule: function() {
       var context = this;
+      Analytics.record({ name: "plan time change schedule" });
       Vue.nextTick(function() {
         var selectIndex = -1;
         for (var i = 0; i < context.schedulesData.length; i++) {
@@ -460,7 +465,6 @@ export default {
     margin-right: 5px;
   }
 }
-
 .card1 {
   background-color: #ffffff;
 }

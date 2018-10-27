@@ -70,7 +70,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  
+  console.log(to.fullPath)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     
     Auth.currentAuthenticatedUser()
@@ -84,7 +84,9 @@ router.beforeEach((to, from, next) => {
         localStorage.setItem("jwtToken", session.idToken.jwtToken)
         next();
       })
-      .catch(e => next({ path: '/signin', query: { redirect: to.fullPath }}));
+      .catch(e => {
+        next({ path: '/signin', query: { redirect: to.fullPath }})
+      } );
       
   } else {
     next();

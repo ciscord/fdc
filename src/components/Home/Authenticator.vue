@@ -55,7 +55,7 @@ export default {
       user: {
         email: null
       },
-      displayMap: { showSignIn: true, showSignUp: false },
+      displayMap: { showSignIn: false, showSignUp: true },
       error: "",
       logger: {}
     };

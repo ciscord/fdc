@@ -36,74 +36,81 @@
   </div>
 </template>
 <script>
-  import 'perfect-scrollbar/dist/css/perfect-scrollbar.css'
-  export default {
-    props: {
-      title: {
-        type: String,
-        default: 'FDC',
-        description: 'Sidebar title'
-      },
-      backgroundColor: {
-        type: String,
-        default: 'black',
-        validator: (value) => {
-          let acceptedValues = ['white', 'brown', 'black']
-          return acceptedValues.indexOf(value) !== -1
-        },
-        description: 'Sidebar background color (white|brown|black)'
-      },
-      activeColor: {
-        type: String,
-        default: 'success',
-        validator: (value) => {
-          let acceptedValues = ['primary', 'info', 'success', 'warning', 'danger']
-          return acceptedValues.indexOf(value) !== -1
-        },
-        description: 'Sidebar active text color (primary|info|success|warning|danger)'
-      },
-      logo: {
-        type: String,
-        default: 'static/img/vue-logo.png',
-        description: 'Sidebar Logo'
-      },
-      sidebarLinks: {
-        type: Array,
-        default: () => [],
-        description: 'Sidebar links. Can be also provided as children components (sidebar-item)'
-      },
-      autoClose: {
-        type: Boolean,
-        default: true
-      }
+import "perfect-scrollbar/dist/css/perfect-scrollbar.css";
+export default {
+  props: {
+    title: {
+      type: String,
+      default: "FDC",
+      description: "Sidebar title"
     },
-    provide() {
-      return {
-        autoClose: this.autoClose
-      }
+    backgroundColor: {
+      type: String,
+      default: "black",
+      validator: value => {
+        let acceptedValues = ["white", "brown", "black"];
+        return acceptedValues.indexOf(value) !== -1;
+      },
+      description: "Sidebar background color (white|brown|black)"
     },
-    methods: {
-      async initScrollBarAsync () {
-        const PerfectScroll = await import('perfect-scrollbar')
-        PerfectScroll.initialize(this.$refs.sidebarScrollArea)
-      }
+    activeColor: {
+      type: String,
+      default: "success",
+      validator: value => {
+        let acceptedValues = [
+          "primary",
+          "info",
+          "success",
+          "warning",
+          "danger"
+        ];
+        return acceptedValues.indexOf(value) !== -1;
+      },
+      description:
+        "Sidebar active text color (primary|info|success|warning|danger)"
     },
-    mounted () {
-      this.initScrollBarAsync()
+    logo: {
+      type: String,
+      default: "static/img/vue-logo.png",
+      description: "Sidebar Logo"
     },
-    beforeDestroy () {
-      if (this.$sidebar.showSidebar) {
-        this.$sidebar.showSidebar = false
-      }
+    sidebarLinks: {
+      type: Array,
+      default: () => [],
+      description:
+        "Sidebar links. Can be also provided as children components (sidebar-item)"
+    },
+    autoClose: {
+      type: Boolean,
+      default: true
+    }
+  },
+  provide() {
+    return {
+      autoClose: this.autoClose
+    };
+  },
+  methods: {
+    async initScrollBarAsync() {
+      const PerfectScroll = await import("perfect-scrollbar");
+      PerfectScroll.initialize(this.$refs.sidebarScrollArea);
+    }
+  },
+  mounted() {
+    this.initScrollBarAsync();
+  },
+  beforeDestroy() {
+    if (this.$sidebar.showSidebar) {
+      this.$sidebar.showSidebar = false;
     }
   }
-
+};
 </script>
 <style>
-  @media (min-width: 992px) {
-    .navbar-search-form-mobile,
-    .nav-mobile-menu{
-      display: none;
-    }
+@media (min-width: 992px) {
+  .navbar-search-form-mobile,
+  .nav-mobile-menu {
+    display: none;
   }
+}
 </style>

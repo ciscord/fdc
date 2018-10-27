@@ -16,8 +16,8 @@
           </thead>
           <tbody>
             <tr v-for="(project,index) in projectData"  :key="project.id">
-              <td v-if="project.checked"><input type="checkbox" checked v-model="project.checked" @change="checkUncheck()"></td>
-              <td v-if="!project.checked"><input type="checkbox" checked v-model="project.checked" @change="checkUncheck()"></td>
+              <td v-if="project.checked"><input type="checkbox" checked v-model="project.checked" @change="checkProject()"></td>
+              <td v-if="!project.checked"><input type="checkbox" checked v-model="project.checked" @change="uncheckProject()"></td>
               <td class="text-center">{{project.name}}</td>
               <td class="text-center">{{project.hours_per_week}}</td>
               <td class="text-center">{{(project.fixed_or_hourly == 0? 'hourly':'fixed')}}</td>
@@ -127,50 +127,57 @@
   </div>
 </template>
 <style scoped>
-  .vdp-datepicker input {
-    margin: 0 auto;
-  }
+.vdp-datepicker input {
+  margin: 0 auto;
+}
 </style>
 <style>
-  .el-table--group::after, .el-table--border::after, .el-table::before {
-    background-color: transparent !important; 
-  }
-  .plan-projects-select {
-    background-color: white;
-    padding: 5px;
-    border: 1px solid #51cbce;
-    border-radius: 3px;
-  }
-  .plan-projects-input-style {
-    width: 80%;
-    display: block;
-    margin: 0 auto;
-  }
-  .vdp-datepicker input {
-    width: 80%;
-    display: block;
-    padding:5px;
-    background-color: #FFFFFF;
-    border: 1px solid #DDDDDD;
-    border-radius: 4px;
-    color: #66615b;
-    line-height: normal;
-    font-size: 14px;
-    -webkit-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    -moz-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    -o-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    -ms-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-  }
-  .plan-project-chart {
-    height: 100%;
-  }
+.el-table--group::after,
+.el-table--border::after,
+.el-table::before {
+  background-color: transparent !important;
+}
+.plan-projects-select {
+  background-color: white;
+  padding: 5px;
+  border: 1px solid #51cbce;
+  border-radius: 3px;
+}
+.plan-projects-input-style {
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+}
+.vdp-datepicker input {
+  width: 80%;
+  display: block;
+  padding: 5px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  color: #66615b;
+  line-height: normal;
+  font-size: 14px;
+  -webkit-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
+  -moz-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
+  -o-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
+  -ms-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.plan-project-chart {
+  height: 100%;
+}
 </style>
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
-import { Auth } from "aws-amplify";
+import { Auth, Analytics } from "aws-amplify";
 Vue.use(require("vue-moment"));
 import {
   getProjectionsAPI,
@@ -192,9 +199,8 @@ export default {
   },
 
   async beforeCreate() {
-
     let session = await Auth.currentSession();
-      console.log(JSON.stringify(session))
+    console.log(JSON.stringify(session));
 
     try {
       this.account = await Auth.currentAuthenticatedUser();
@@ -219,17 +225,28 @@ export default {
 
   data() {
     return {
-
       isLoading: false,
       fullPage: true,
       projectData: {},
       projectionsData: {},
       yearCols: {},
-      columns1: ["Forecast", "Name", "Hours / Week", "Fixed / Hourly", "Start Date", "End Date", "Total Hours", "Hourly Rate", "Total Fee", "Status", ""],
+      columns1: [
+        "Forecast",
+        "Name",
+        "Hours / Week",
+        "Fixed / Hourly",
+        "Start Date",
+        "End Date",
+        "Total Hours",
+        "Hourly Rate",
+        "Total Fee",
+        "Status",
+        ""
+      ],
       columns2: ["Week Of", "Hours", "Earned", "Effective Rate"],
 
-      weekTotalHours:0,
-      weekTotalEarned:0,
+      weekTotalHours: 0,
+      weekTotalEarned: 0,
 
       input: {
         name: "",
@@ -237,10 +254,10 @@ export default {
         fixed_hourly: "Hourly",
         startDate: "",
         endDate: "",
-        totalHours:"",
-        hourlyRate:"",
-        totalFee:"",
-        status:"Proposed"
+        totalHours: "",
+        hourlyRate: "",
+        totalFee: "",
+        status: "Proposed"
       },
       editInput: {
         name: "",
@@ -248,39 +265,35 @@ export default {
         fixed_hourly: "Hourly",
         startDate: "",
         endDate: "",
-        totalHours:"",
-        hourlyRate:"",
-        totalFee:"",
-        status:""
+        totalHours: "",
+        hourlyRate: "",
+        totalFee: "",
+        status: ""
       },
 
       chartData: [],
-      weeklyStatusData: [],
-    }
+      weeklyStatusData: []
+    };
   },
 
   methods: {
-    changeJobType: function (event) {
+    changeJobType: function(event) {
       this.input.fixed_hourly = event.target.value;
     },
-    changeStatus: function (event) {
+    changeStatus: function(event) {
       this.input.status = event.target.value;
     },
 
-    getProjections() {
-     
-    },
+    getProjections() {},
     getProjects() {
       this.isLoading = true;
       getProjectsAPI().then(data => {
         this.projectData = data;
-        this.projectData.forEach(function(project, index)
-        {
-          project.checked = true
-        })
-        console.log(JSON.stringify(this.projectData));
+        this.projectData.forEach(function(project, index) {
+          project.checked = true;
+        });
         this.isLoading = false;
-        this.getWeeklyReport()
+        this.getWeeklyReport();
       });
     },
     addProjects(params) {
@@ -302,7 +315,6 @@ export default {
     },
 
     add: function() {
-      
       // if (this.input.name === "") {
       //   this.$refs.name.focus();
       //   return;
@@ -325,156 +337,159 @@ export default {
       //   this.$refs.totalFee.focus();
       //   return;
       // }
-      let params = {}
+      let params = {};
 
-      params.user_id = "11134d33-a025-4d50-88a3-c629428ab542"
-      params.name = this.input.name
-      
-      params.hours_per_week = this.input.hours_week
-      params.total_hours = this.input.totalHours
-      params.start_date = this.input.startDate
-      params.end_date = this.input.endDate
-      params.fixed_or_hourly = this.input.fixed_hourly
-      params.hourly_rate = this.input.hourlyRate
-      params.total_fee = this.input.totalFee
-      params.status = this.input.status
-      
-      this.addProjects(params)
+      params.user_id = "11134d33-a025-4d50-88a3-c629428ab542";
+      params.name = this.input.name;
+
+      params.hours_per_week = this.input.hours_week;
+      params.total_hours = this.input.totalHours;
+      params.start_date = this.input.startDate;
+      params.end_date = this.input.endDate;
+      params.fixed_or_hourly = this.input.fixed_hourly;
+      params.hourly_rate = this.input.hourlyRate;
+      params.total_fee = this.input.totalFee;
+      params.status = this.input.status;
+
+      this.addProjects(params);
 
       for (var key in this.input) {
         this.input[key] = "";
       }
       this.$refs.name.focus();
+      Analytics.record({ name: "plan projects add project" });
     },
     //function to defintely delete data
     deleete: function(index) {
       this.projectData.splice(index, 1);
-      this.getWeeklyReport()
+      this.getWeeklyReport();
+      Analytics.record({ name: "plan projects delete project" });
     },
 
-    checkUncheck:function() {
-      this.getWeeklyReport()
+    checkProject: function() {
+      this.getWeeklyReport();
+      Analytics.record({ name: "plan projects enable forecast" });
     },
-
+    uncheckProject: function() {
+      this.getWeeklyReport();
+      Analytics.record({ name: "plan projects disable forecast" });
+    },
 
     /////////-------------- calculate modules -----------------
 
     getWeeklyReport() {
-      let firstMonday = this.getMonday(this.getEarlistDateFromProjects())
-      let lastMonday = this.getMonday(this.getLastDateFromProjects())
-      let nextMonday = firstMonday
+      let firstMonday = this.getMonday(this.getEarlistDateFromProjects());
+      let lastMonday = this.getMonday(this.getLastDateFromProjects());
+      let nextMonday = firstMonday;
 
       //add chart data
       this.chartData = [];
-      this.weeklyStatusData = []
+      this.weeklyStatusData = [];
       let chartEarnedItem = {};
-      chartEarnedItem.name = 'Earned';
+      chartEarnedItem.name = "Earned";
       chartEarnedItem.data = {};
 
       let chartEffectiveRateitem = {};
-      chartEffectiveRateitem.name = 'Effective Rate';
+      chartEffectiveRateitem.name = "Effective Rate";
       chartEffectiveRateitem.data = {};
 
-      
       var i = 0;
-     while (1) {
-       i ++;
-        nextMonday = this.getNextMonday(nextMonday)
-        
+      while (1) {
+        i++;
+        nextMonday = this.getNextMonday(nextMonday);
 
-        this.gethoursEarnedPerWeek(nextMonday)
+        this.gethoursEarnedPerWeek(nextMonday);
 
-        chartEarnedItem.data[this.getFormatDate(nextMonday)] =
-          this.weekTotalEarned.toFixed(0);
+        chartEarnedItem.data[
+          this.getFormatDate(nextMonday)
+        ] = this.weekTotalEarned.toFixed(0);
 
-        chartEffectiveRateitem.data[this.getFormatDate(nextMonday)] =
-        (this.weekTotalEarned/this.weekTotalHours).toFixed(2);
+        chartEffectiveRateitem.data[this.getFormatDate(nextMonday)] = (
+          this.weekTotalEarned / this.weekTotalHours
+        ).toFixed(2);
 
-        this.weeklyStatusData.push({'weekof': nextMonday, 'hours': this.weekTotalHours, 'earned':this.weekTotalEarned})
+        this.weeklyStatusData.push({
+          weekof: nextMonday,
+          hours: this.weekTotalHours,
+          earned: this.weekTotalEarned
+        });
 
         if (nextMonday >= lastMonday) {
           break;
         }
+      }
 
-     }
-
-     this.chartData.push(chartEarnedItem);
-     this.chartData.push(chartEffectiveRateitem);
-     
-      console.log('-' + JSON.stringify(this.weeklyStatusData))
+      this.chartData.push(chartEarnedItem);
+      this.chartData.push(chartEffectiveRateitem);
     },
 
     gethoursEarnedPerWeek(d) {
-      this.weekTotalHours = 0
-      this.weekTotalEarned = 0
+      this.weekTotalHours = 0;
+      this.weekTotalEarned = 0;
       if (this.projectData.length > 0) {
-        let _weekself = this
-        this.projectData.forEach(function(project, index)
-        {
+        let _weekself = this;
+        this.projectData.forEach(function(project, index) {
           if (project.checked) {
-            if (d >= new Date(project.start_date) && d <= new Date(project.end_date)) {
-            // console.log('include date' + d)
-
-              if( project.fixed_hourly == 0)//hourly
-              {
-                _weekself.weekTotalHours += project.hours_per_week
-                _weekself.weekTotalEarned += project.hourly_rate * project.hours_per_week
-              }else //fixed
-              {
-                let hourlyRate = project.total_fee/project.total_hours
-                _weekself.weekTotalHours += project.hours_per_week
-                _weekself.weekTotalEarned += hourlyRate * project.hours_per_week
+            if (
+              d >= new Date(project.start_date) &&
+              d <= new Date(project.end_date)
+            ) {
+              if (project.fixed_hourly == 0) {
+                //hourly
+                _weekself.weekTotalHours += project.hours_per_week;
+                _weekself.weekTotalEarned +=
+                  project.hourly_rate * project.hours_per_week;
+              } //fixed
+              else {
+                let hourlyRate = project.total_fee / project.total_hours;
+                _weekself.weekTotalHours += project.hours_per_week;
+                _weekself.weekTotalEarned +=
+                  hourlyRate * project.hours_per_week;
               }
-
             }
           }
-          
-
-        })
+        });
       }
     },
 
     getMonday(d) {
       d = new Date(d);
       var day = d.getDay(),
-      diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-      return new Date(d.setDate(diff))
+        diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+      return new Date(d.setDate(diff));
     },
 
     getNextMonday(d) {
       d = new Date(d);
-      d.setDate(d.getDate() + (7-d.getDay())%7+1);
-      return d
+      d.setDate(d.getDate() + ((7 - d.getDay()) % 7) + 1);
+      return d;
     },
 
     getFormatDate(d) {
-      var today = d
+      var today = d;
       var dd = today.getDate();
-      var mm = today.getMonth()+1; //January is 0!
+      var mm = today.getMonth() + 1; //January is 0!
 
       var yyyy = today.getFullYear();
-      if(dd<10){
-          dd='0'+dd;
-      } 
-      if(mm<10){
-          mm='0'+mm;
-      } 
-      var today = mm+'/'+dd+'/'+yyyy;
-      return today
+      if (dd < 10) {
+        dd = "0" + dd;
+      }
+      if (mm < 10) {
+        mm = "0" + mm;
+      }
+      var today = mm + "/" + dd + "/" + yyyy;
+      return today;
     },
     getEarlistDateFromProjects() {
       var earlistDate = new Date(2200, 1, 1);
-       
-      if (this.projectData.length > 0) {
 
-        this.projectData.forEach(function(project, index)
-        {
+      if (this.projectData.length > 0) {
+        this.projectData.forEach(function(project, index) {
           if (earlistDate > new Date(project.start_date)) {
             // console.log('project.start_date' + earlistDate)
-            earlistDate = new Date(project.start_date)
+            earlistDate = new Date(project.start_date);
           }
-
-        })
+        });
       }
       // console.log('earlist' + earlistDate)
       return earlistDate;
@@ -482,21 +497,17 @@ export default {
 
     getLastDateFromProjects() {
       var lastDate = new Date(1980, 1, 1);
-      
-      if (this.projectData.length > 0) {
 
-        this.projectData.forEach(function(project, index)
-        {
-         
+      if (this.projectData.length > 0) {
+        this.projectData.forEach(function(project, index) {
           if (lastDate < new Date(project.end_date)) {
-            lastDate = new Date(project.end_date)
+            lastDate = new Date(project.end_date);
           }
-        })
+        });
       }
       // console.log('last' + lastDate)
       return lastDate;
     }
-
   }
 };
 </script>
