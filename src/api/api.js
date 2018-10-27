@@ -17,10 +17,10 @@ export const getProjectionsAPI = params => { return axios.get(`${base}/projectio
     Authorization: 'Bearer ' + localStorage.getItem('jwtToken') //the token is a variable which holds the token
   },params: params }).then(res => res.data); };
 
-export const getMonthlyIncomeAPI = params => { return axios.get(`${base}/income/2017-12-01`, { headers: {
+export const getMonthlyIncomeAPI = params => { return axios.get(`${base}/income/2017-12-01/2018-12-01`, { headers: {
     Authorization: 'Bearer ' + localStorage.getItem('jwtToken') //the token is a variable which holds the token
   },params: params }).then(res => res.data); };
-export const updateIncomeAPI = params => { return axios.put(`${base}/income`, params, { headers: {
+export const updateIncomeAPI = params => { return axios.post(`${base}/income`, params, { headers: {
     Authorization: 'Bearer ' + localStorage.getItem('jwtToken') //the token is a variable which holds the token
   }}).then(res => res.data); };
 

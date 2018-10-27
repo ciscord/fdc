@@ -19,10 +19,10 @@
           <tbody>
             <tr v-for="(income,index) in incomeData" :key="income.id">
               <td>{{income.observation_month}}</td>
-              <td>{{income.num_projects}}</td>
-              <td>{{income.num_hours}}</td>
+              <td>{{income.projects}}</td>
+              <td>{{income.hours}}</td>
               <td>${{income.total_income}}</td>
-              <td>${{income.total_income/income.num_hours}}</td>
+              <td>${{income.total_income/income.hours}}</td>
               
               <td style="width: 40px; height:50px;text-align:center;">
                 <button @click="deleteIncome(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button>
@@ -287,9 +287,9 @@ export default {
       }
 
       let newIncome = {
-        "projects": this.input.projects,
-        "hours": this.input.hours,
-        "total_income": this.input.income,
+        "projects": parseInt(this.input.projects),
+        "hours": parseFloat(this.input.hours),
+        "total_income": parseFloat(this.input.income),
         "observation_month": this.input.month
       };
 
