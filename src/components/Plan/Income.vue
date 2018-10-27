@@ -25,7 +25,7 @@
               <td>${{income.total_income/income.num_hours}}</td>
               
               <td style="width: 40px; height:50px;text-align:center;">
-                <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button>
+                <button @click="deleteIncome(index)" type="button" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times"></i></button>
               </td>
             </tr>
             <tr class="last-row">
@@ -93,9 +93,6 @@
           </table>
         </div>
       </div>
-    <div class="row">
-      <a href="#!" @click="updateIncome" class="btn btn-success">Save</a>
-    </div>
   </div>
 </template>
 
@@ -214,8 +211,6 @@ export default {
                 }
                 if(i != 0){
                   chartitem.data[this.projectionsData.years[j].replace(/\s/g, '') ] = dif;
-                }else {
-                  chartitem.data[this.projectionsData.years[j].replace(/\s/g, '') ] = values[j];
                 }
             }
             this.chartData.push(chartitem)
@@ -253,9 +248,10 @@ export default {
         console.log(JSON.stringify(this.incomeData));
       });
     },
-    updateIncome() {
+    updateIncome(newIncome) {
       this.isLoading = true;
-      updateIncomeAPI(this.incomeData).then(data => {
+      console.log(newIncome)
+      updateIncomeAPI(newIncome).then(data => {
         this.getIncome();
       });
     },
@@ -290,12 +286,14 @@ export default {
         return;
       }
 
-      this.incomeData.push({
-        observation_month: this.input.month.toISOString().substring(0, 10),
-        num_projects: this.input.projects,
-        num_hours: this.input.hours,
-        total_income: this.input.income
-      });
+      let newIncome = {
+        "projects": this.input.projects,
+        "hours": this.input.hours,
+        "total_income": this.input.income,
+        "observation_month": this.input.month
+      };
+
+      this.updateIncome(newIncome)
 
       for (var key in this.input) {
         this.input[key] = "";
@@ -303,7 +301,7 @@ export default {
       this.$refs.projects.focus();
     },
     //function to defintely delete data
-    deleete: function(index) {
+    deleteIncome: function(index) {
       this.incomeData.splice(index, 1);
     }
   }
