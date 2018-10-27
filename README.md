@@ -76,10 +76,40 @@ example
       EmailVerificationSubject: !Ref emailVerificationSubject
 ```
 
+Add analytics
+```
+$ amplify add analytics
+```
+
 Provisions cloud resources with the latest local developments.
 ```
 $ amplify push
 ```
+
+Amazon Pinpoint Analytics with Amazon Cognito User Pools
+https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-pinpoint-integration.html
+
+
+### ! Be sure that you have own `.env` file
+
+You can generate .env file manually by running:
+```
+cp .env.example .env
+```
+generate stripe Publishable key
+<img src="documentation/img/stripe.png" width="480px" />
+
+copy Publishable key and replace VUE_APP_STRIPE_KEY value in the .env file
+
+stripe test card info
+https://stripe.com/docs/testing
+
+
+
+create paypal app and credentials
+https://developer.paypal.com/docs/integration/admin/manage-apps/#create-an-app-for-testing
+
+
 
 ### Compiles and hot-reloads for development
 ```

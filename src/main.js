@@ -45,6 +45,24 @@ Vue.use(VeeValidate)
 locale.use(lang)
 
 
+// stripe 
+import VueStripeCheckout from 'vue-stripe-checkout';
+ 
+const options = {
+  key: process.env.VUE_APP_STRIPE_KEY,
+  image: 'https://i.imgur.com/1PHlmFF.jpg',
+  locale: 'auto',
+  currency: 'USD',
+  billingAddress: false,
+  panelLabel: 'Subscribe'
+}
+ 
+Vue.use(VueStripeCheckout, options);
+
+//paypal 
+import PayPal from 'vue-paypal-checkout'
+Vue.component('paypal-checkout', PayPal)
+
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes
@@ -52,7 +70,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  
+  console.log(to.fullPath)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     
     Auth.currentAuthenticatedUser()
@@ -64,10 +82,11 @@ router.beforeEach((to, from, next) => {
 
         let session = await Auth.currentSession();
         localStorage.setItem("jwtToken", session.idToken.jwtToken)
-        // console.log(localStorage.getItem('jwtToken'))
         next();
       })
-      .catch(e => next({ path: '/signin', query: { redirect: to.fullPath }}));
+      .catch(e => {
+        next({ path: '/signin', query: { redirect: to.fullPath }})
+      } );
       
   } else {
     next();

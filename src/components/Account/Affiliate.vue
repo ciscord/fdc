@@ -19,7 +19,7 @@
               </tr>
               <tr class="last-row">
                 <td><b>Your Affiliate Link</b></td>
-                <td><a v-if="affiliateId" :href="'https://app.freelancedevelopercoach.com/sign-up/?affiliate-id=' + affiliateId">https://app.freelancedevelopercoach.com/sign-up/?affiliate-id{{affiliateId}}</a></td>
+                <td><a v-if="affiliateId" :href="affiliateLink">{{affiliateLink}}</a></td>
               </tr>
             </tbody>
           </table>
@@ -171,6 +171,13 @@ export default {
       getProfileAPI().then(data => {
         this.isLoading = false;
         this.affiliateId = data.affiliate_id;
+
+        if (process.env.NODE_ENV == "development") {
+          this.affiliateLink = 'http://localhost:8081/#/signup/?affiliate-id=' + this.affiliateId
+          
+        }else {
+          this.affiliateLink = 'https://app.freelancedevelopercoach.com/#/signup/?affiliate-id=' + this.affiliateId
+        }
       });
     },
 

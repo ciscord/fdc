@@ -98,8 +98,9 @@
 
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
-import { Auth } from "aws-amplify";
+
 import { mapActions } from 'vuex';
+import { Auth, Analytics } from "aws-amplify";
 
 import {
   getProjectionsAPI,
@@ -245,7 +246,6 @@ export default {
       getMonthlyIncomeAPI().then(data => {
         this.incomeData = data;
         this.isLoading = false;
-        console.log(JSON.stringify(this.incomeData));
       });
     },
     updateIncome(newIncome) {
@@ -299,10 +299,12 @@ export default {
         this.input[key] = "";
       }
       this.$refs.projects.focus();
+      Analytics.record({ name: 'plan income add month' })
     },
     //function to defintely delete data
     deleteIncome: function(index) {
       this.incomeData.splice(index, 1);
+      Analytics.record({ name: 'plan income delete month' })
     }
   }
 };

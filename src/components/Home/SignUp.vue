@@ -1,8 +1,32 @@
 <template>
   
+  
   <div v-bind:class="amplifyUI.formSection">
-    <div v-bind:class="amplifyUI.sectionHeader">Sign Up</div>
-    <div v-bind:class="amplifyUI.sectionBody">
+    <div v-show="!paidstatus">
+      <h3 class="text-center">Join Our FDC</h3>
+      <h5> Freelance Developer Coach is building a web application for freelance software developers to manage their career.
+      </h5>
+      <h5>The price for 90-day Plan Level account is $21</h5>
+
+      <button @click="checkout" class="btn btn-success btn-block" type="submit">Pay with credit or debit card</button>
+      <div class="text-center">or</div>
+      <div id="paypal-button"></div>
+      <div class="text-center">
+        <paypal-checkout
+          amount="21.00"
+          currency="USD"
+          :client="credentials"
+          v-on:ppayment-authorized="paypalPaymentAuthorized"
+          v-on:payment-completed="paypalPaymentCompleted"
+          v-on:payment-cancelled="paypalPaymentCancelled"
+          :env="development">
+        </paypal-checkout
+      ></div>
+      
+    </div>
+
+    <div v-show="paidstatus" v-bind:class="amplifyUI.sectionHeader">Sign Up</div>
+    <div v-show="paidstatus" v-bind:class="amplifyUI.sectionBody">
       <div v-bind:class="amplifyUI.formField" 
           v-for="signUpField in orderBy(this.options.signUpFields, 'displayOrder')" 
           :signUpField="signUpField" 
@@ -21,7 +45,7 @@
     </div>
     <div v-bind:class="amplifyUI.sectionFooter">
       <span v-bind:class="amplifyUI.sectionFooterPrimaryContent">
-        <button v-bind:class="amplifyUI.button" v-on:click="signUp">Create Account</button>
+        <button v-show="paidstatus" v-bind:class="amplifyUI.button" v-on:click="signUp">Create Account</button>
       </span>
       <span v-bind:class="amplifyUI.sectionFooterSecondaryContent">
         Have an Account?
@@ -39,11 +63,33 @@ import { AmplifyEventBus } from "aws-amplify-vue";
 import Vue from "vue";
 import * as AmplifyUI from "@aws-amplify/ui";
 import { Auth } from "aws-amplify";
+import PayPal from "vue-paypal-checkout";
+import VueCookie from "vue-cookie";
+Vue.use(VueCookie);
 
 export default {
   name: "SignUp",
+  components: {
+    PayPal
+  },
 
   async beforeCreate() {
+    if (this.$route.query["affiliate-id"] != undefined) {
+      Auth.signOut()
+        .then(() => {
+        })
+        .catch(e => this.setError(e));
+
+      this.$cookie.set("affiliate_id", this.$route.query["affiliate-id"], 1);
+      console.log("affiliate" + this.$cookie.get("affiliate_id"));
+    }
+    if (process.env.NODE_ENV == "development") {
+      console.log("development");
+      this.development = "sandbox";
+    } else {
+      console.log("production");
+      this.development = "production";
+    }
     try {
       await Auth.currentAuthenticatedUser();
       this.signedIn = true;
@@ -61,12 +107,17 @@ export default {
 
   data() {
     return {
+      development: "production",
+      paidstatus: false,
       amplifyUI: AmplifyUI,
       error_message: "",
-      signedIn: false
+      signedIn: false,
+      credentials: {
+        sandbox: process.env.VUE_APP_PAYPAL_SANBOX_ID,
+        production: process.env.VUE_APP_PAYPAL_PRODUCKTION_ID
+      }
     };
   },
-
   computed: {
     options() {
       const defaults = {
@@ -88,11 +139,23 @@ export default {
           }
         ]
       };
+
       return Object.assign(defaults, this.signUpConfig || {});
     }
   },
 
   methods: {
+    paypalPaymentAuthorized: function(data) {
+      console.log("data" + data);
+    },
+    paypalPaymentCompleted: function(data) {
+      console.log("data1" + data);
+      this.paidstatus = true;
+    },
+    paypalPaymentCancelled: function(data) {
+      console.log("data2" + data);
+    },
+
     signUp: function() {
       if (!this.validate()) {
         return null;
@@ -145,6 +208,19 @@ export default {
 
     setError: function(e) {
       this.error_message = e.message || e;
+    },
+
+    checkout: function() {
+      //stripe payment
+      this.$checkout.open({
+        name: "Payment Details",
+        currency: "USD",
+        amount: 2100,
+        token: token => {
+          console.log("token " + JSON.stringify(token));
+          this.paidstatus = true;
+        }
+      });
     }
   }
 };

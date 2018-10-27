@@ -1,7 +1,6 @@
 
 <template>
   <div class="vld-parent">
-    
 
     <loading :active.sync="isLoading" 
     :can-cancel="true" 
@@ -12,8 +11,8 @@
       <div class="col-lg-8 style-paper text-center">
         <h4>Schedules</h4>
         <div class="row">
-          <div class="col-lg-2 col-sm-2 text-left">
-            <a href="#!" @click="makeCurrent" class="btn btn-success make-current-btn-mobile-size">Make Current</a>
+          <div class="col-lg-4 col-sm-4 text-left">
+            <a @click="makeCurrent" class="btn btn-success make-current-btn-mobile-size">Make Current</a>
           </div>
           <div class="col-lg-4 col-sm-4">
             <el-select size="large" placeholder="Single Select" class="schedule-select" v-model="selects.simple" @change="selectSchedule()">
@@ -25,14 +24,13 @@
               <el-option value="-1" label="Add New..." key="-1"/>
             </el-select>
           </div>
-          <div class="col-lg-6 col-sm-6 text-right">
-            <a href="#!" @click="deleteTime" class="btn btn-danger delete-btn-mobile-size">Delete</a>
+          <div class="col-lg-4 col-sm-4 text-right">
+            <a  @click="deleeteSchedule" class="btn btn-danger delete-btn-mobile-size">Delete</a>
           </div>
         </div>
         <hr>
         <div v-if="selects.simple == -1" class="col-lg-12 schedules-table-content">
           <h4 class="card-title">Add Schedule</h4>
-          
          
         </div>
         
@@ -53,7 +51,7 @@
                 <td>{{activity.hours}}</td>
                 <td style="width: 18%; height:50px;" class="text-right">
                   <div class="cell">
-                    <button @click.stop="deleteShedule(index)" type="button" class="btn btn-icon btn-danger btn-sm">
+                    <button @click="deleete(index)" type="button" class="btn btn-icon btn-danger btn-sm" v-show="activity.deleteable">
                      <i class="fa fa-times"></i>
                     </button>
                   </div>
@@ -63,7 +61,10 @@
                 <td></td>
                 <td>
                   <div class="input-field col-lg-10 pl-0">
-                    <input class="form-control" placeholder="Activity" ref="activity" v-model="input.activity" id="activity" type="text">
+                    <input class="form-control" placeholder="Activity" ref="activity" @input="changeActivity()" v-model="input.activity" id="activity" type="text">
+                  </div>
+                  <div class="text-danger invalid-feedback" v-show="validActivityName" style="display: block;">
+                    Invaild name.
                   </div>
                 </td>
                 <td>
@@ -139,8 +140,12 @@
 <script>
 import Vue from "vue";
 import { AmplifyEventBus } from "aws-amplify-vue";
-import { Auth } from "aws-amplify";
-import { getSchedulesAPI, updateSchedulesAPI, addSchedulesAPI } from "./../../api/api";
+import { Auth, Analytics } from "aws-amplify";
+import {
+  getSchedulesAPI,
+  updateSchedulesAPI,
+  addSchedulesAPI
+} from "./../../api/api";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import { mapActions } from 'vuex';
@@ -155,9 +160,7 @@ import {
   Option
 } from "element-ui";
 
-
 export default {
-
   components: {
     Loading,
     [Select.name]: Select,
@@ -175,8 +178,8 @@ export default {
   data() {
     return {
       //for modal input
-      showModal:false,
-      scheduleName:'',
+      showModal: false,
+      scheduleName: "",
 
       //loading
       isLoading: false,
@@ -212,7 +215,8 @@ export default {
           is_not: "current"
         }
       },
-      validScheduleName:false,
+      validScheduleName: false,
+      validActivityName: false
     };
   },
 
@@ -252,13 +256,23 @@ export default {
       this.currentIndex = 0;
       for (var i = 0; i < this.schedulesData.length; i++) {
         let schedule = this.schedulesData[i];
+        for (var j = 0; j < schedule.activities.length; j++) {
+          let activity = schedule.activities[j];
+          if (
+            activity.name.toLowerCase() == "sleep" ||
+            activity.name.toLowerCase() == "eat" ||
+            activity.name.toLowerCase() == "exercise"
+          ) {
+            activity.deleteable = false;
+          } else {
+            activity.deleteable = true;
+          }
+        }
         if (schedule.is_current == true) {
           this.currentIndex = i;
           this.selects.simple = schedule.entity_id;
-          break;
         }
       }
-
       this.isLoading = false;
     },
     updateSchedules() {
@@ -278,18 +292,35 @@ export default {
       });
     },
 
-    makeCurrent: function() {},
+    makeCurrent: function() {
+      Analytics.record({ name: "plan time make current" });
+    },
 
-    changeScheduleName:function () {
-      
-      if (this.input.schedule.toLowerCase() != 'current' && this.input.schedule != '') {
-        
-        this.validScheduleName = false
-      }else {
-        this.validScheduleName = true
+    changeActivity: function() {
+      if (
+        this.input.activity.toLowerCase() != "sleep" &&
+        this.input.activity != "" &&
+        this.input.activity.toLowerCase() != "eat" &&
+        this.input.activity.toLowerCase() != "exercise"
+      ) {
+        this.validActivityName = false;
+      } else {
+        this.validActivityName = true;
       }
     },
-    add () {
+
+    changeScheduleName: function() {
+      if (
+        this.input.schedule.toLowerCase() != "current" &&
+        this.input.schedule != ""
+      ) {
+        this.validScheduleName = false;
+      } else {
+        this.validScheduleName = true;
+      }
+    },
+
+    add: function() {
       if (this.input.activity === "") {
         this.$refs.activity.focus();
         return;
@@ -316,6 +347,7 @@ export default {
       }
       this.$refs.activity.focus();
       // this.updateSchedules()
+      Analytics.record({ name: "plan time add schedule item" });
     },
     hideDialog () {
       this.showModal = false
@@ -324,24 +356,30 @@ export default {
       if (this.input.schedule == '') {
         return
       }
-
+      Analytics.record({ name: "plan time add schedule" });
       let params = {
-        "user_id": this.$store.getters.user.username,
-        "name": this.input.schedule,
-        "is_current": false,
-        "allocated": 0,
-        "available": 168,
-        "activities": []
-      }
-      addSchedulesAPI(params).then(data => {
-        this.getSchedules();
-        this.showModal = false
-      });
+        user_id: this.$store.getters.user.username,
+        name: this.input.schedule,
+        is_current: false,
+        allocated: 0,
+        available: 168,
+        activities: [
+          { name: "Sleep", frequency: 7, hours: 8, deleteable: false },
+          { name: "Eat", frequency: 7, hours: 2, deleteable: false },
+          { name: "Exercise", frequency: 7, hours: 1, deleteable: false }
+        ]
+      };
+      this.schedulesData.push(params);
+
+      this.showModal = false;
+
+      // need to implement addSchedule api integration
+      // addSchedulesAPI(params).then(data => {
+      //   this.getSchedules();
+      // this.showModal = false
+      // });
     },
-    //function to defintely deleteShedule data
-    deleteShedule: function(index) {
-      this.schedulesData.splice(index, 1);
-    },
+    
 
     deleteTime () {
       if (!this.activeActivities.length) return;
@@ -350,9 +388,20 @@ export default {
       });
       this.activeActivities = [];
     },
+    //function to defintely delete data
+    deleete: function(index) {
+      Analytics.record({ name: "plan time delete schedule item" });
+      this.schedulesData[this.currentIndex].activities.splice(index, 1);
+    },
+
+    deleeteSchedule: function() {
+      Analytics.record({ name: "plan time delete schedule" });
+    },
 
     selectSchedule: function() {
       var context = this;
+      Analytics.record({ name: "plan time change schedule" });
+
       this.activeActivities = [];
       Vue.nextTick(function() {
           var selectIndex = -1
@@ -367,9 +416,8 @@ export default {
           if (selectIndex == -1) {
             context.showModal = true
             context.currentIndex = 0
-          }
-        
-        
+
+        }
       });
     }
   }
@@ -463,7 +511,6 @@ export default {
     margin-right: 5px;
   }
 }
-
 .card1 {
   background-color: #ffffff;
 }
