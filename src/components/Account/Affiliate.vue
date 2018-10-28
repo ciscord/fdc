@@ -18,8 +18,12 @@
                 <td>{{ affiliateId }}</td>
               </tr>
               <tr class="last-row">
-                <td><b>Your Affiliate Link</b></td>
-                <td><a v-if="affiliateId" :href="affiliateLink">{{affiliateLink}}</a></td>
+                <td><b>Long Affiliate Link</b></td>
+                <td><a v-if="affiliateId" :href="affiliateLink" target="_blank">{{affiliateLink}}</a></td>
+              </tr>
+              <tr>
+                <td><b>Short Affiliate Link</b></td>
+                <td><a v-if="affiliateId" :href="affiliateShortLink" target="_blank">{{affiliateShortLink}}</a></td>
               </tr>
             </tbody>
           </table>
@@ -156,6 +160,7 @@ export default {
 
       affiliateId: "",
       affiliateLink: "",
+      affiliateShortLink: "",
       affiliateData: [],
       affiliatePending: 0,
       affiliatePaid: 0,
@@ -172,12 +177,8 @@ export default {
         this.isLoading = false;
         this.affiliateId = data.affiliate_id;
 
-        if (process.env.NODE_ENV == "development") {
-          this.affiliateLink = 'http://localhost:8081/#/signup/?affiliate-id=' + this.affiliateId
-          
-        }else {
-          this.affiliateLink = 'https://app.freelancedevelopercoach.com/#/signup/?affiliate-id=' + this.affiliateId
-        }
+        this.affiliateLink = 'https://www.freelancedevelopercoach.com/?a=' + this.affiliateId
+        this.affiliateShortLink = 'http://frdvc.com/?a=' + this.affiliateId
       });
     },
 
