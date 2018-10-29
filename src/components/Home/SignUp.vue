@@ -74,15 +74,7 @@ export default {
   },
 
   async beforeCreate() {
-    if (this.$route.query["affiliate-id"] != undefined) {
-      Auth.signOut()
-        .then(() => {
-        })
-        .catch(e => this.setError(e));
-
-      this.$cookie.set("affiliate_id", this.$route.query["affiliate-id"], 1);
-      console.log("affiliate" + this.$cookie.get("affiliate_id"));
-    }
+   
     if (process.env.NODE_ENV == "development") {
       console.log("development");
       this.development = "sandbox";
@@ -107,6 +99,7 @@ export default {
 
   data() {
     return {
+      affiliate_id:'',
       development: "production",
       paidstatus: false,
       amplifyUI: AmplifyUI,
@@ -124,18 +117,26 @@ export default {
         header: "Sign Up",
         signUpFields: [
           {
+            label: "Affiliate ID",
+            key: "affiliate_id",
+            required: false,
+            type: "string",
+            value:this.$cookie.get("affiliate_id"),
+            displayOrder: 1
+          },
+          {
             label: "Email",
             key: "email",
             required: true,
             type: "string",
-            displayOrder: 1
+            displayOrder: 2
           },
           {
             label: "Password",
             key: "password",
             required: true,
             type: "password",
-            displayOrder: 2
+            displayOrder: 3
           }
         ]
       };
@@ -168,6 +169,9 @@ export default {
           user.username = e.value;
         } else if (e.key === "password") {
           user.password = e.value;
+        }else if (e.key === "affiliate_id") {
+          this.$cookie.set("affiliate_id", e.value, 1);
+
         } else {
           user.attributes[e.key] = e.value;
         }
@@ -217,7 +221,8 @@ export default {
         currency: "USD",
         amount: 2100,
         token: token => {
-          console.log("token " + JSON.stringify(token));
+          // console.log("token " + JSON.stringify(token));
+          this.$cookie.set("stripe_token", token.id, 1);
           this.paidstatus = true;
         }
       });

@@ -45,3 +45,7 @@ export const addProjectsAPI = params => { return axios.post(`${base}/projects`, 
 export const updateProjectsAPI = params => { return axios.put(`${base}/projects`, params, { headers: {
     Authorization: 'Bearer ' + localStorage.getItem('jwtToken') // the token is a variable which holds the token
   }}).then(res => res.data); };
+
+  export const paymentStripeAPI = params => { return axios.post(`${base}/payment/stripe`, params, { headers: {
+    Authorization: 'Bearer ' + localStorage.getItem('jwtToken') // the token is a variable which holds the token
+  }}).then(res => res.data); };

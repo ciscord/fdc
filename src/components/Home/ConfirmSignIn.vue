@@ -29,7 +29,7 @@
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import * as AmplifyUI from "@aws-amplify/ui";
-
+import { paymentStripeAPI } from "./../../api/api";
 export default {
   name: "ConfirmSignIn",
   props: ["confirmSignInConfig"],
@@ -73,6 +73,19 @@ export default {
       )
         .then(() => {
           this.logger.info("confirmSignIn successs");
+          let params = {}
+
+          params.amount = "2.0"
+          params.currency = "usd"
+          params.source = this.$cookie.get("stripe_token")
+          params.plan_level = "Plan"
+          params.affiliate_id = this.$cookie.get("affiliate_id")
+
+          console.log('stripe api params'+JSON.stringify(params))
+          paymentStripeAPI(params).then(data => {
+            console.log('stripe api'+JSON.stringify(data))
+          });
+
           AmplifyEventBus.$emit("authState", "signedIn");
         })
         .catch(e => this.setError(e));

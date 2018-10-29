@@ -34,7 +34,7 @@
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import * as AmplifyUI from "@aws-amplify/ui";
-
+import { paymentStripeAPI } from "./../../api/api";
 export default {
   name: "ConfirmSignUp",
   props: ["confirmSignUpConfig"],
@@ -66,6 +66,21 @@ export default {
       this.$Amplify.Auth.confirmSignUp(this.options.username, this.code)
         .then(() => {
           this.logger.info("confirmSignUp success");
+
+
+          let params = {}
+
+          params.amount = "2.0"
+          params.currency = "usd"
+          params.source = this.$cookie.get("stripe_token")
+          params.plan_level = "Plan"
+          params.affiliate_id = this.$cookie.get("affiliate_id")
+
+console.log('stripe api params'+JSON.stringify(params))
+          paymentStripeAPI(params).then(data => {
+            console.log('stripe api'+JSON.stringify(data))
+          });
+
           AmplifyEventBus.$emit("authState", "signedOut");
         })
         .catch(e => this.setError(e));
