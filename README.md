@@ -105,11 +105,15 @@ stripe test card info
 https://stripe.com/docs/testing
 
 
+generate paypal Client ID
 
-create paypal app and credentials
-https://developer.paypal.com/docs/integration/admin/manage-apps/#create-an-app-for-testing
-
-
+1. login https://developer.paypal.com
+2. click Dashboard/My Apps & Credentials
+<img src="documentation/img/developerpaypal.png" width="480px" />
+3. click Create App button
+<img src="documentation/img/create_app.png" width="480px" />
+4. Copy & paste sandbox/live Client ID
+<img src="documentation/img/paypalclientid.png" width="480px" />
 
 ### Compiles and hot-reloads for development
 ```
