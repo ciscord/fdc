@@ -96,7 +96,7 @@ You can generate .env file manually by running:
 ```
 cp .env.example .env
 ```
-generate stripe Publishable key
+## generate stripe Publishable key
 <img src="documentation/img/stripe.png" width="480px" />
 
 copy Publishable key and replace VUE_APP_STRIPE_KEY value in the .env file
@@ -105,7 +105,7 @@ stripe test card info
 https://stripe.com/docs/testing
 
 
-generate paypal Client ID
+## generate paypal Client ID
 
 1. login https://developer.paypal.com
 2. click Dashboard/My Apps & Credentials
