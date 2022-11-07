@@ -1,5 +1,4 @@
 # fdc
-http://fdcamplify.s3-website-us-east-1.amazonaws.com
 
 ## Creating & configuring the Vue project
 
@@ -12,11 +11,11 @@ npm install -g @vue/cli
 1. Clone project and install dependencies 
 
 ```
-$ git clone https://github.com/FreelanceDeveloperCoach/fdc-web-ui.git
+$ git clone https://github.com/ciscord/fdc.git
 ```
 
 ```
-$ cd fdc-web-ui
+$ cd fdc
 ```
 
 ```
